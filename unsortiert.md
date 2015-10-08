@@ -99,3 +99,250 @@ console.log('Typed Array content', typedArray);
 
 ---
 
+**WebAudio**
+
+When setting `gainNode.gain.value`
+
+Fehler:
+Value being assigned to AudioParam.value is not a finite floating-point value
+
+Lösung:
+anstatt 0 mach ne 0.0
+
+---
+
+**JS Refactoring**
+
+z.util.ArrayUtil.move_element self_index, center, participants_sorted
+	
+Moves an element from one place to another by it's index.
+This change happens in place which means that the array is modified immediately.
+
+todo: nice idea, DSL with "move_element.from(...).to(...).in(...)"
+
+---
+
+
+**jasmine.Ajax**
+
+```coffeescript
+backend.respondWith 'GET', "http://localhost/endpoint", [200, {"Content-Type": "application/json"}, '{"B":"B"}']
+```
+
+```coffeescript
+beforeEach ->
+server = sinon.fakeServer.create()
+
+it 'A', ->
+  url = 'http://localhost/test'
+  server.respondWith 'GET', url, [200, {"Content-Type": "application/json"}, '{"A":"A"}']
+
+  $.ajax
+    dataType: 'json'
+    url: url
+    success: (data, textStatus, jqXHR) ->
+      console.log "Response: #{JSON.stringify(data)}"
+
+  server.respond()
+
+  server.respondWith 'GET', url, [200, {"Content-Type": "application/json"}, '{"B":"B"}']
+
+  $.ajax
+    dataType: 'json'
+    url: url
+    success: (data, textStatus, jqXHR) ->
+      console.log "Response: #{JSON.stringify(data)}"
+
+  server.respond()
+
+  expect('A').toBe 'A'
+```
+
+```coffeescript
+it 'can handle an unlimited amount of requests and respond to each one individually after all requests have been made', ->
+  jasmine.Ajax.install()
+  url = 'http://localhost/test'
+
+  $.ajax
+    dataType: 'json'
+    url: url
+    success: (data, textStatus, jqXHR) ->
+      # Receives {"A":"A"}
+      console.log "Response: #{JSON.stringify(data)}"
+
+  $.ajax
+    dataType: 'json'
+    url: url
+    success: (data, textStatus, jqXHR) ->
+      # Receives {"B":"B"}
+      console.log "Response: #{JSON.stringify(data)}"
+
+  request = jasmine.Ajax.requests.first()
+  request.respondWith {
+    contentType: 'application/json'
+    responseText: '{"A":"A"}'
+    status: 200
+  }
+
+  request = jasmine.Ajax.requests.mostRecent()
+  request.respondWith {
+    contentType: 'application/json'
+    responseText: '{"B":"B"}'
+    status: 200
+  }
+
+  expect(jasmine.Ajax.requests.count()).toBe 2
+  jasmine.Ajax.uninstall()
+```
+
+```coffeescript
+it 'can handle an unlimited amount of requests and respond to each one individually after all requests have been made', ->
+  jasmine.Ajax.install()
+  url = 'http://localhost/test'
+
+  $.ajax
+    dataType: 'json'
+    url: url
+    success: (data, textStatus, jqXHR) ->
+      # Receives {"A":"A"}
+      console.log "Response: #{JSON.stringify(data)}"
+
+  $.ajax
+    dataType: 'json'
+    url: url
+    success: (data, textStatus, jqXHR) ->
+      # Receives {"B":"B"}
+      console.log "Response: #{JSON.stringify(data)}"
+
+  responses = [
+    {
+      contentType: 'application/json'
+      responseText: '{"A":"A"}'
+      status: 200
+    },
+    {
+      contentType: 'application/json'
+      responseText: '{"B":"B"}'
+      status: 200
+    }
+  ]
+
+  for i in [0...jasmine.Ajax.requests.count()]
+    request = jasmine.Ajax.requests.at i
+    request.respondWith responses[i]
+
+  expect(jasmine.Ajax.requests.count()).toBe 2
+  jasmine.Ajax.uninstall()
+```
+
+```coffeescript
+var preFilters = $.Callbacks();
+$.ajaxPrefilter(preFilters.fire);
+```
+
+```coffeescript
+it 'can handle an unlimited amount of requests and respond to each one individually after all requests have been made', ->
+  jasmine.Ajax.install()
+
+  $.ajax
+    contentType: 'application/json; charset=utf-8'
+    data: JSON.stringify {"PUT": "Request"}
+    type: 'PUT'
+    url: 'http://localhost/test'
+    success: (data, textStatus, jqXHR) ->
+      # Receives: {"PUT":"Successful"}
+      console.log "Response: #{JSON.stringify(data)}"
+
+  $.ajax
+    dataType: 'json'
+    url: 'http://localhost/abc'
+    success: (data, textStatus, jqXHR) ->
+      # Receives nothing
+      console.log "Response: #{JSON.stringify(data)}"
+
+  $.ajax
+    contentType: 'application/json; charset=utf-8'
+    data: JSON.stringify {"POST": "Request"}
+    type: 'POST'
+    url: 'http://localhost/test'
+    success: (data, textStatus, jqXHR) ->
+      # Receives: {"POST":"Successful"}
+      console.log "Response: #{JSON.stringify(data)}"
+
+  $.ajax
+    dataType: 'json'
+    url: 'http://localhost/test'
+    success: (data, textStatus, jqXHR) ->
+      # Receives: {"GET":"Successful"}
+      console.log "Response: #{JSON.stringify(data)}"
+
+  responses = {
+    'http://localhost/test': {
+      'PUT': [
+        {
+          data: {"PUT": "Request"},
+          response: {
+            contentType: 'application/json'
+            responseText: '{"PUT":"Successful"}'
+            status: 200
+          }
+        }
+      ],
+      'GET': [
+        {
+          data: {},
+          response: {
+            contentType: 'application/json'
+            responseText: '{"GET":"Successful"}'
+            status: 200
+          }
+        },
+        {
+          data: {},
+          response: {
+            contentType: 'application/json'
+            responseText: '{"SECOND-GET":"Successful"}'
+            status: 200
+          }
+        }
+      ],
+      'POST': [
+        {
+          data: {"POST":"Request"},
+          response: {
+            contentType: 'application/json'
+            responseText: '{"POST":"Successful"}'
+            status: 200
+          }
+        }
+      ]
+    }
+  }
+
+  for i in [0...jasmine.Ajax.requests.count()]
+    request = jasmine.Ajax.requests.at i
+    response_candidates = responses[request.url]?[request.method]
+
+    if response_candidates
+      for response_candidate in response_candidates
+        request_data = JSON.stringify request.data()
+        expected_request = JSON.stringify response_candidate.data
+
+        if request_data is expected_request
+          # Find the index of the response in our mocked data
+          response_index = response_candidates.indexOf response_candidate
+          # Send the response
+          request.respondWith response_candidate.response
+          # Remove the response from our mocked data
+          response_candidates.splice response_index, 1
+          if Object.keys(responses[request.url][request.method]).length is 0
+            delete responses[request.url][request.method]
+          break
+
+  expect(jasmine.Ajax.requests.count()).toBe 4
+  jasmine.Ajax.uninstall()
+```
+
+---
+
+
