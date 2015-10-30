@@ -393,4 +393,34 @@ for (var len = 10, i = 0; i < len; i++) {
 }
 ```
 
+---
+
+**Enums in CoffeeScript** 
+
+Definition:
+
+```coffeescript
+window.Proteus ?= {}
+window.Proteus.errors ?= {}
+
+class Proteus.errors.DecodeError
+  INVALID_ARRAY_LEN: 'Array length mismatch'
+  INVALID_TYPE: 'Invalid type'
+  MISSING_FIELD: 'Missing field'
+
+  constructor: (@message) ->
+    return @
+```
+
+Anwendung:
+
+```coffeescript
+Proteus.errors.DecodeError::INVALID_TYPE
+```
+
+In JavaScript:
+
+```coffeescript
+Proteus.errors.DecodeError.prototype.INVALID_TYPE;
+```
 
