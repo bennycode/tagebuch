@@ -345,4 +345,52 @@ it 'can handle an unlimited amount of requests and respond to each one individua
 
 ---
 
+**Node.js Buffers in Plain JavaScript**
+
+```javascript
+// Node.js
+var buffer = new Buffer(8); // uninitialized buffer with 8 bytes capacity
+buffer.fill(0); // fill buffer with Zeros (00 00 00 00 00 00 00 00)
+
+// JavaScript
+var buffer = new ArrayBuffer(8);
+console.log(buffer.byteLength); // 8 bytes long buffer (all bytes are pre-initialized to 0)
+
+// Read data into buffer
+var arrayBuffer = new ArrayBuffer(8);
+var array = [0, 0, 0, 0, 0, 0, 0, 0];
+var arrayBufferView = new Uint8Array(buffer);
+for (var i = 0; i < arrayBufferView.length; i++) {
+  arrayBufferView[i] = array[i];
+}
+```
+
+**Bad JavaScript comments**
+
+```javascript
+// Bad: https://github.com/benadida/node-hkdf/blob/master/lib/hkdf.js#L17 
+
+// imk is initial keying material
+function HKDF(hashAlg, salt, ikm) {
+  ...
+}
+
+// good
+
+
+```
+
+**Cool JavaScript loops**
+
+```javascript
+var len = 10, i = 0;
+for (; i < len; i++) {
+  console.log('Loop');
+}
+
+for (var len = 10, i = 0; i < len; i++) {
+  console.log('Loop');
+}
+```
+
 
