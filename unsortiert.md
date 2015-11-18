@@ -424,3 +424,49 @@ In JavaScript:
 Proteus.errors.DecodeError.prototype.INVALID_TYPE;
 ```
 
+---
+
+**IIFE**
+
+- http://benalman.com/news/2010/11/immediately-invoked-function-expression/#iife
+
+- Immediately-Invoked Function Expression
+- Self-executing anonymous function
+- Safety Wrapper
+- Self-invoked anonymous function
+
+```javascript
+(function(){ 
+  // Placeholder
+})();
+```
+
+**Node-style callbacks**
+
+Callbacks in localForage are Node-style (error argument first).
+
+Example:
+
+```javascript
+localforage.getItem('key', function(err, value) {
+    if (err) {
+        console.error('Oh noes!');
+    } else {
+        alert(value);
+    }
+});
+```
+
+**Java Unicode German Umlaut Escape Sequences**
+
+- https://github.com/SarahRoehricht/LMw94wasHhHQTWMH/commit/d4e1ea8f750846bcf0cccc5ff750f9b4fbcee00b
+
+Character | Unicode
+:---:|:---:
+Ä | \u00c4
+ä | \u00e4
+Ö | \u00d6
+ö | \u00f6
+Ü | \u00dc
+ü | \u00fc
+ß | \u00df
