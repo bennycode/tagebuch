@@ -470,3 +470,11 @@ Character | Unicode
 Ü | \u00dc
 ü | \u00fc
 ß | \u00df
+
+**+function**
+
+- The word function looks like the beginning of a **function declaration** rather than a **function expression** and so the `()` following it (the ones at the end of the line above) would be a syntax error (as would the absense of a name, in that example)
+- You can use parentheses (this is more common) like: `(function() { console.log("Foo!"); }());`
+
+- https://raw.githubusercontent.com/twbs/bootstrap/master/dist/js/bootstrap.js
+- http://stackoverflow.com/a/13341710/451634
