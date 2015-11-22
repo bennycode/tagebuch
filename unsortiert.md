@@ -459,8 +459,6 @@ localforage.getItem('key', function(err, value) {
 
 **Java Unicode German Umlaut Escape Sequences**
 
-- https://github.com/SarahRoehricht/LMw94wasHhHQTWMH/commit/d4e1ea8f750846bcf0cccc5ff750f9b4fbcee00b
-
 Character | Unicode
 :---:|:---:
 Ä | \u00c4
