@@ -477,3 +477,41 @@ Character | Unicode
 
 - https://raw.githubusercontent.com/twbs/bootstrap/master/dist/js/bootstrap.js
 - http://stackoverflow.com/a/13341710/451634
+
+**Regex: Ranges & Capturing Groups**
+
+```javascript
+"Windows 10".match(/Windows/); // ["Windows"]
+"Windows 10".match(/[0-9]/); // ["1"], Range
+"Windows 10".match(/\d/); // ["1"], digit (also matches Eastern Arabic numerals)
+"Windows 10".match(/\d{1,2}/); // ["10"]
+"Windows 10".match(/\d+/g); // ["10"], d+ one or more digits
+"Windows 10".match(/\d+\./); // null
+"Windows 10.1".match(/\d+\./); // ["10."]
+"Windows 10.1".match(/\d+\.+\d/); // ["10.1"]
+"Windows 10.10".match(/\d+\.+\d/); // ["10.1"]
+"Windows 10.10".match(/\d+\.+\d+/); // ["10.10"]
+"Windows 10.10.10".match(/\d+\.+\d/); // ["10.1"]
+"Windows 10.10.10".match(/\d+\.+\d+/); // ["10.10"]
+"Windows 10.10.10".match(/(\d+\.)/); // ["10.", "10."]
+"Windows 10.10.10".match(/(\d+(\.)?){3}/); // ["10.10.10", "10", undefined], Repeating match group + one or less
+"Windows 10.10.10".match(/(\d+)\.(\d+)\.(\d+)/); // Match groups. They will output the whole result + the result of the matched groups, so ["10.10.10", "10", "10", "10"]
+// More advanced
+"Windows 10.10.10".match(/([A-Za-z ]+) (\d+)\.(\d+)\.(\d+)/); // ["Windows 10.10.10", "Windows", "10", "10", "10"]
+"Windows 1\r\n0".match(/\d{1,2}/); ["1"]
+"Windows 1\r\n0".match(/\d{1,2}/g); ["1", "0"]
+```
+
+Display
+
+```
+^(\d+\.){3}(\d+)$
+
+^			Beginning of line
+  (\d+\.)	Any number 1 or more followed by a .
+  {3}		The above should happen 3 times
+  (\d+)		A number 1 or more.
+$			End of the line/data
+```
+
+TODO: - Capturing & Non-Capturing groups (http://www.bennyn.de/regex)
