@@ -515,3 +515,63 @@ $			End of the line/data
 ```
 
 TODO: - Capturing & Non-Capturing groups (http://www.bennyn.de/regex)
+
+**Bower**
+
+Reference SVN repositories:
+
+```json
+"cryptojs": "svn+http://crypto-js.googlecode.com/svn/#3.1.2"
+```
+
+On Windows you need an SVN client for that like "CollabNet Subversion 1.9.2 (Windows 64-bit)":
+- http://www.collab.net/downloads/subversion
+
+Registered libraries:
+
+```json
+"jquery": "2.1.4"
+````
+
+Warning, because of Bower downtime.
+
+The pro way:
+
+```json
+"jquery": "git@github.com:jquery/jquery.git#2.1.4",
+```
+
+Local files on Windows:
+
+```json
+"example": "file://C:/Projects/my-project/.git#9203e6166b343d7d8b3bb638775b41fe5de3524c"
+```
+
+**CoffeeScript**
+
+```coffeescript
+if @is_answer() is true and @media_stream() isnt undefined and @has_added_remote_sdp() is true
+  return true
+``` 
+
+->
+
+```coffeescript
+return @is_answer() and @media_stream()? and @has_added_remote_sdp()
+```
+
+OK, but...
+
+```coffeescript
+if z.util.Environment.browser.firefox
+  signaling_states = [A, B]
+```
+
+->
+
+```coffeescript
+signaling_states = [A, B] if z.util.Environment.browser.firefox
+```
+
+isn't cool because you read from left to right and cannot skip right away.
+
