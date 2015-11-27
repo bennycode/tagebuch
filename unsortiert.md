@@ -575,3 +575,29 @@ signaling_states = [A, B] if z.util.Environment.browser.firefox
 
 isn't cool because you read from left to right and cannot skip right away.
 
+**Content Security Policy**
+
+```python
+response.headers['Strict-Transport-Security'] = 'max-age=26280000'
+response.headers['X-Content-Type-Options'] = 'nosniff'
+response.headers['X-Frame-Options'] = 'deny'
+response.headers['X-XSS-Protection'] = '1; mode=block'
+
+csp_values = ';'.join([
+  # Firefox <35 need this data: attribute for the grayscale filter based on SVG to work https://bugzilla.mozilla.org/show_bug.cgi?id=878608; in newer FF versions we use the new grayscale filter
+  "default-src data:",
+  "connect-src 'self' https://*.giphy.com https://api.raygun.io https://www.google.com https://prod-nginz-https.wire.com wss://prod-nginz-ssl.wire.com https://staging-nginz-https.zinfra.io wss://staging-nginz-ssl.zinfra.io https://edge-nginz-https.zinfra.io wss://edge-nginz-ssl.zinfra.io",
+  "font-src 'self' data:",
+  "frame-src 'self' https://accounts.google.com https://*.youtube.com https://*.soundcloud.com https://*.vimeo.com https://*.spotify.com",
+  "img-src 'self' blob: data: https://*.giphy.com https://1-ps.googleusercontent.com https://*.localytics.com https://prod-nginz-https.wire.com https://*.cloudfront.net https://*.zinfra.io https://www.google-analytics.com https://csi.gstatic.com",
+  # Firefox 36 does not handle "media-src" correctly, so we have to use a wildcard to make calling work.
+  # Firefox 37 does not have this issue anymore, so we can change our CSP values for "media-src" in the future.
+  "media-src *",
+  "object-src 'self' https://*.youtube.com 1-ps.googleusercontent.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com https://*.localytics.com https://www.google-analytics.com https://api.raygun.io https://prod-nginz-https.wire.com https://staging-nginz-https.zinfra.io https://edge-nginz-https.zinfra.io",
+  "style-src 'self' 'unsafe-inline' https://*.wire.com https://*.googleusercontent.com"
+])
+response.headers['Content-Security-Policy'] = csp_values
+response.headers['X-Content-Security-Policy'] = csp_values
+```
+
