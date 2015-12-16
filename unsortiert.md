@@ -601,3 +601,72 @@ response.headers['Content-Security-Policy'] = csp_values
 response.headers['X-Content-Security-Policy'] = csp_values
 ```
 
+## Web Worker
+
+### Dedicated Worker
+
+**index.html**
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <script>
+      // Worker Initialization
+      var workerUrl = 'js/ReverseTextWorker.js';
+      var worker = new Worker(workerUrl);
+
+      worker.addEventListener('message', function (output) {
+        console.log('Result from dedicated Worker: ' + output.data);
+      }, false);
+
+      worker.postMessage('Hello World');
+    </script>
+  </body>
+</html>
+```
+
+**js/ReverseTextWorker.js**
+
+```javascript
+/* global self */
+
+// Worker Definition
+self.addEventListener('message', function (input) {
+  var ouput = input.data.split('').reverse().join('');
+  self.postMessage(ouput);
+}, false);
+```
+
+### Dedicated Inline-Worker
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <script>
+      // Worker Definition
+      var reverseTextWorker = new Blob(["self.addEventListener('message', function (input) { var ouput = input.data.split('').reverse().join(''); self.postMessage(ouput); }, false);"], {type: 'text/javascript'});
+
+      // Worker Initialization
+      var workerUrl = window.URL.createObjectURL(reverseTextWorker);
+      var worker = new Worker(workerUrl);
+
+      worker.addEventListener('message', function (output) {
+        console.log('Result from dedicated Worker: ' + output.data);
+      }, false);
+
+      worker.postMessage('Hello World');
+    </script>
+  </body>
+</html>
+
+```
