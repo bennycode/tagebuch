@@ -601,6 +601,20 @@ response.headers['Content-Security-Policy'] = csp_values
 response.headers['X-Content-Security-Policy'] = csp_values
 ```
 
+----------
+
+**Travis CI: Encrypt environment variables**
+
+```bash
+# Given that Ruby is installed...
+gem install travis
+travis login
+cd C:\dev\projects\welovecoding\webapp
+travis encrypt PASSWORD=secret123 --add`
+```
+
+----------
+
 ## Web Worker
 
 ### Dedicated Worker
@@ -668,5 +682,6 @@ self.addEventListener('message', function (input) {
     </script>
   </body>
 </html>
-
 ```
+
+----------
