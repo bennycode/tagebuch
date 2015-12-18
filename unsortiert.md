@@ -685,3 +685,56 @@ self.addEventListener('message', function (input) {
 ```
 
 ----------
+
+## Working with Promises & localForage
+
+```javascript
+var users = [];
+
+var data = {
+  'User@1': 'Homer',
+  'User@2': 'Marge',
+  'User@3': 'Lisa',
+  'User@4': 'Bart',
+  'User@5': 'Maggie',
+  'Location@1': 'London',
+  'Location@2': 'Paris',
+  'Location@3': 'Rome'
+};
+
+// Clear database (delete items)
+localforage.clear()
+  // Fill database (save items)
+  .then(function () {
+    var keys = Object.keys(data);
+    var promises = keys.map(function (key) {
+      return localforage.setItem(key, data[key]);
+    });
+    return Promise.all(promises);
+  })
+  .then(function (values) {
+    console.log('Saved items: ' + values.length, values);
+  })
+  .then(function () {
+    // Filter database (query items)
+    localforage.keys()
+      .then(function (keys) {
+        var pattern = 'User';
+        return filtered_key = keys.filter(function (key) {
+          return key.indexOf(pattern) > -1
+        })
+      })
+      .then(function (filtered_key) {
+        var promises = filtered_key.map(function (item) {
+          return localforage.getItem(item);
+        });
+        return Promise.all(promises);
+      })
+      .then(function (values) {
+        users = values;
+        console.log('Filtered items: ' + users.length, users);
+      });
+  });
+```
+
+----------
