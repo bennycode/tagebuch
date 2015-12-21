@@ -738,3 +738,120 @@ localforage.clear()
 ```
 
 ----------
+
+## Callbacks
+
+**Iteration 1**
+
+```javascript
+    function queryEncoding(onSuccess, onError) {
+    var method = 'GET';
+    var url = 'https://spreadsheets.google.com/feeds/list/o13394135408524254648.240766968415752635/od6/public/values?alt=json';
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          var json = JSON.parse(xhr.responseText);
+          var encoding = json.encoding;
+          if (typeof onSuccess === 'function') {
+            onSuccess(encoding);
+          }
+        } else {
+          var error = new Error('Could not get encoding.');
+          if (typeof onError === 'function') {
+            onError(error);
+          }
+        }
+      }
+    };
+    xhr.open(method, url, true);
+    xhr.send(null);
+  }
+
+  queryEncoding(function (encoding) {
+    console.log('Received encoding: ' + encoding);
+  }, function (error) {
+    console.log('Error: ' + error.message, error);
+  });
+```
+
+**Iteration 2**
+
+```javascript
+  function queryEncoding(onSuccess, onError) {
+    var method = 'GET';
+    var url = 'https://spreadsheets.google.com/feeds/list/o13394135408524254648.240766968415752635/od6/public/values?alt=json';
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          var json = JSON.parse(xhr.responseText);
+          var encoding = json.encoding;
+          if (typeof onSuccess === 'function') {
+            onSuccess(encoding);
+          }
+        } else {
+          var error = new Error('Could not get encoding.');
+          if (typeof onError === 'function') {
+            onError(error);
+          }
+        }
+      }
+    };
+
+    xhr.open(method, url, true);
+    xhr.send(null);
+  }
+
+  var callbacks = {
+    onSuccess: function (encoding) {
+      console.log('Received encoding: ' + encoding);
+    },
+    onError: function (error) {
+      console.log('Error: ' + error.message, error);
+    }
+  };
+
+  queryEncoding(callbacks.onSuccess, callbacks.onError);
+```
+
+**Iteration 3**
+
+```javascript
+  var queryEncoding = function () {
+    var promise = new Promise(function (resolve, reject) {
+      var method = 'GET';
+      var url = 'https://spreadsheets.google.com/feeds/list/o13394135408524254648.240766968415752635/od6/public/values?alt=json';
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            var json = JSON.parse(xhr.responseText);
+            var encoding = json.encoding;
+            resolve(encoding);
+          } else {
+            var error = new Error('Could not get encoding.');
+            reject(error);
+          }
+        }
+      };
+      xhr.open(method, url, true);
+      xhr.send(null);
+    });
+
+    return promise;
+  };
+
+  var callbacks = {
+    onSuccess: function (encoding) {
+      console.log('Received encoding: ' + encoding);
+    },
+    onError: function (error) {
+      console.log('Error: ' + error.message, error);
+    }
+  };
+
+  queryEncoding().then(callbacks.onSuccess).catch(callbacks.onError);
+```
