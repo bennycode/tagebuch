@@ -817,7 +817,7 @@ localforage.clear()
   queryEncoding(callbacks.onSuccess, callbacks.onError);
 ```
 
-**Iteration 3**
+**Iteration 3: with Promises**
 
 ```javascript
   var queryEncoding = function () {
@@ -855,3 +855,45 @@ localforage.clear()
 
   queryEncoding().then(callbacks.onSuccess).catch(callbacks.onError);
 ```
+
+**Iteration 4: with Promises & Fetch API**
+
+```javascript
+  var queryEncoding = function () {
+    var method = 'GET';
+    var url = 'https://sspreadsheets.google.com/feeds/list/o13394135408524254648.240766968415752635/od6/public/values?alt=json';
+
+    var promise = new Promise(function (resolve, reject) {
+      var request = new Request(url);
+      var options = {
+        method: method
+      };
+
+      window.fetch(request, options).then(function (response) {
+        response.json().then(function (json) {
+          var encoding = json.encoding;
+          resolve(encoding);
+        });
+      }).catch(function (error) {
+        var error = new Error('Could not get encoding.');
+        reject(error);
+      });
+    });
+
+    return promise;
+  };
+
+  var callbacks = {
+    onSuccess: function (encoding) {
+      console.log('Received encoding: ' + encoding);
+    },
+    onError: function (error) {
+      console.log('Error: ' + error.message, error);
+    }
+  };
+
+  queryEncoding().then(callbacks.onSuccess).catch(callbacks.onError);
+```
+
+----------
+
