@@ -656,6 +656,26 @@ self.addEventListener('message', function (input) {
 }, false);
 ```
 
+**Important Note!** :construction:
+
+To not mess up with message events from other domains you should make use of a `targetOrigin`:
+
+```javascript
+/* global self */
+
+// Worker Definition
+self.addEventListener('message', function (event) {
+  // Note: A dedicated worker does not have access to `window` so we take it from the event
+  var window = window || event.currentTarget;
+  var targetOrigin = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
+
+  if (event.origin === targetOrigin) {
+    var ouput = event.data.split('').reverse().join('');
+    self.postMessage(ouput, targetOrigin);
+  }
+}, false);
+```
+
 ### Dedicated Inline-Worker
 
 ```html
