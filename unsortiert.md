@@ -917,3 +917,19 @@ localforage.clear()
 
 ----------
 
+## CoffeeScript's Existential Operator
+
+**CoffeeScript**
+
+```coffeescript
+targetOrigin =  event.data?.targetOrigin?;
+```
+
+**Transpiled JavaScript**
+
+```javascript
+var ref, targetOrigin;
+targetOrigin = ((ref = event.data) != null ? ref.targetOrigin : void 0) != null;
+```
+
+----------
