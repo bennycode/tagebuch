@@ -676,6 +676,19 @@ self.addEventListener('message', function (event) {
 }, false);
 ```
 
+```javascript
+/* global self */
+
+// Worker Definition
+self.addEventListener('message', function (event) {
+  // Don't talk with "https://accounts.google.com" & Co.
+  if (event.origin === '') {
+    var ouput = event.data.split('').reverse().join('');
+    self.postMessage(ouput);
+  }
+}, false);
+```
+
 ### Dedicated Inline-Worker
 
 ```html
