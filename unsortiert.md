@@ -79,6 +79,8 @@ println!("Key: {}\n", fmt_hex(&master_key));
 
 **Working with Typed Arrays**
 
+- http://www.html5rocks.com/en/tutorials/webgl/typed_arrays/
+
 ```javascript
 var byteArray = [5, 30, 208, 218, 140, 173, 89, 133, 238, 120, 243, 172, 56, 0, 84, 80, 225, 83, 110, 68, 59, 136, 105, 202, 200, 243, 73, 174, 28, 38, 66, 246];
 var arrayBuffer = new ArrayBuffer(byteArray.length);
