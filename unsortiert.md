@@ -16,7 +16,6 @@ var randomBytes = crypto.getRandomValues(arrayBufferView);
 Read more:
 
 - http://blog.tompawlak.org/how-to-generate-random-values-nodejs-javascript
-- https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
 - https://msdn.microsoft.com/en-us/library/dn302324(v=vs.85).aspx
 - https://developer.mozilla.org/de/docs/Web/API/RandomSource/getRandomValues
 - Compatibility: https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues
@@ -43,6 +42,7 @@ Reference:
 ---
 
 - [How to convert ArrayBuffer to and from String](https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String)
+- http://www.javascripture.com/ArrayBuffer
 
 ---
 
