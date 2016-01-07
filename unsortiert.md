@@ -44,6 +44,22 @@ Reference:
 - [How to convert ArrayBuffer to and from String](https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String)
 - http://www.javascripture.com/ArrayBuffer
 
+**ArrayBuffer to String**
+
+```coffeescript
+array_buffer_to_base64_string = (array_buffer) ->
+  binary = ''
+  bytes = new Uint8Array array_buffer
+  len = bytes.byteLength
+  i = 0
+
+  while i < len
+    binary += String.fromCharCode bytes[i]
+    i++
+
+  return btoa binary
+```
+
 ---
 
 Byte array to hexadecimal string conversion
