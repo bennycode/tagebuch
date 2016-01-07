@@ -44,7 +44,7 @@ Reference:
 - [How to convert ArrayBuffer to and from String](https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String)
 - http://www.javascripture.com/ArrayBuffer
 
-**ArrayBuffer to String**
+**ArrayBuffer to String (Base64-encoded)**
 
 ```coffeescript
 array_buffer_to_base64_string = (array_buffer) ->
@@ -58,6 +58,13 @@ array_buffer_to_base64_string = (array_buffer) ->
     i++
 
   return btoa binary
+```
+
+Alternative:
+
+```coffeescript
+array_buffer_to_base64_string = (array_buffer) ->
+  return String.fromCharCode.apply(null, new Uint8Array(array_buffer));
 ```
 
 ---
