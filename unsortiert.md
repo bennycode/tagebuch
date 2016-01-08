@@ -64,7 +64,8 @@ Alternative:
 
 ```coffeescript
 array_buffer_to_base64_string = (array_buffer) ->
-  return String.fromCharCode.apply(null, new Uint8Array(array_buffer));
+  string = String.fromCharCode.apply(null, new Uint8Array(array_buffer)); 
+  return window.btoa string
 ```
 
 ---
