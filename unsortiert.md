@@ -1016,3 +1016,19 @@ async().then(function (results) {
   console.log(results);
 });
 ```
+
+----------
+
+## Install WildFly AS
+
+- `add-user.bat` (`admin`/`admin`)
+- `standalone.bat`
+- Admin console listening on http://127.0.0.1:9990
+- Standard: http://localhost:8080/
+
+**Configs:**
+
+```
+%WILDFLY_HOME%\standalone\configuration\standalone-full.xml
+%WILDFLY_HOME%\standalone\configuration\mgmt-users.properties
+```
