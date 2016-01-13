@@ -1,0 +1,32 @@
+{
+  "specifications": [
+    {
+      "name": "AngularJS",
+      "slugs": [
+        "angularjs",
+        "angular"
+      ],
+      "type": "web-framework",
+      "includes": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "JavaScript",
+      "slugs": [
+        "javascript",
+        "js"
+      ],
+      "type": "programming-language",
+      "includes": []
+    },
+    {
+      "name": "Dan Wahlin",
+      "slugs": [
+        "dan-wahlin"
+      ],
+      "type": "author",
+      "javascript": []
+    }
+  ]
+}

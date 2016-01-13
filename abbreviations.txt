@@ -1,0 +1,7 @@
+HMVC - Hierarchical Model-View-Controller
+MMV - Multiuse Model View
+MVA - Model-View-Adapter
+MVC - Model-View-Controller
+MVP - Model-View-Presenter
+MVVM - Model-View-ViewModel
+MVW - Model-View-Whatever
