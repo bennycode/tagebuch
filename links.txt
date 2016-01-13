@@ -3,3 +3,4 @@ http://de.slideshare.net/DavidAm/multi-modularized-project-setup-with-gulp-types
 http://weblogs.asp.net/dwahlin/creating-a-typescript-workflow-with-gulp #blog #workflow #typescript #gulp #dan-wahlin
 http://chariotsolutions.com/blog/post/angular2-starter-walkthrough-overview/ #angular2 #walkthrough #overview
 https://www.youtube.com/watch/?v=HijZNR6kc9A #sourcemaps #video #tutorial
+http://www.nytimes.com/interactive/2016/01/07/travel/places-to-visit.html #places #travels #holidays
