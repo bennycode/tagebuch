@@ -1,0 +1,5 @@
+http://cherylhoward.com/berlin/berlin-guide/ #berlin #bars #restaurants #coffee-shops #favourites #tips #recommendations
+http://de.slideshare.net/DavidAm/multi-modularized-project-setup-with-gulp-typescript-and-angularjs #presentation #powerpoint #typescript #gulp #angularjs #project-setup #david-amend
+http://weblogs.asp.net/dwahlin/creating-a-typescript-workflow-with-gulp #blog #workflow #typescript #gulp #dan-wahlin
+http://chariotsolutions.com/blog/post/angular2-starter-walkthrough-overview/ #angular2 #walkthrough #overview
+https://www.youtube.com/watch/?v=HijZNR6kc9A #sourcemaps #video #tutorial
