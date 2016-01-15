@@ -1032,3 +1032,16 @@ async().then(function (results) {
 %WILDFLY_HOME%\standalone\configuration\standalone-full.xml
 %WILDFLY_HOME%\standalone\configuration\mgmt-users.properties
 ```
+
+----------
+
+## RegEx from String
+
+**Match everything until the first dot**
+
+```javascript
+// With classic regex
+'welovecoding.com'.match(/[^.]*/i);
+// With a String regex
+'welovecoding.com'.match(new RegExp('[^.]*', 'i'));
+```
