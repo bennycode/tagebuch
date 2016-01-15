@@ -1041,7 +1041,7 @@ async().then(function (results) {
 
 ```javascript
 // With classic regex
-'welovecoding.com'.match(/[^.]*/i);
+var resultsArray = 'welovecoding.com'.match(/[^.]*/i);
 // With a String regex
-'welovecoding.com'.match(new RegExp('[^.]*', 'i'));
+var resultsArray = 'welovecoding.com'.match(new RegExp('[^.]*', 'i'));
 ```
