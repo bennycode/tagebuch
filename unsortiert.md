@@ -1045,3 +1045,29 @@ var resultsArray = 'welovecoding.com'.match(/[^.]*/i);
 // With a String regex
 var resultsArray = 'welovecoding.com'.match(new RegExp('[^.]*', 'i'));
 ```
+
+----------
+
+**NO seperation between view and logic**
+
+```html
+<form id="form-contact" onsubmit="return validate(this);">
+  ...
+</form>
+```
+
+**Seperation between view and logic**
+
+```html
+<form id="form-contact">
+  ...
+</form>
+<script>
+  var formContact = document.getElementById('form-contact');
+  formContact.addEventListener('submit', function(submitEvent){
+    submitEvent.preventDefault();
+  });
+</script>
+```
+
+----------
