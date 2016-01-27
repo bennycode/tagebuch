@@ -1071,6 +1071,7 @@ var resultsArray = 'welovecoding.com'.match(new RegExp('[^.]*', 'i'));
     submitEvent.preventDefault();
   });
 </script>
+```
 
 ----------
 
