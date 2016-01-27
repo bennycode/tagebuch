@@ -1048,6 +1048,9 @@ var resultsArray = 'welovecoding.com'.match(new RegExp('[^.]*', 'i'));
 
 ----------
 
+## MV-Something in HTML
+
+
 **NO seperation between view and logic**
 
 ```html
@@ -1068,6 +1071,41 @@ var resultsArray = 'welovecoding.com'.match(new RegExp('[^.]*', 'i'));
     submitEvent.preventDefault();
   });
 </script>
+
+----------
+
+## Modern JavaScript
+
+Functional programming, String Substitution (Template Strings) & convenient methods
+
+**Before**
+
+```javascript
+var names = ["Sarah", "Benny", "Felina"];
+
+for (var i = 0, length = names.length; i < length; i++) { 
+  console.log('Hello, ' + names[i] + '!');
+}
+```
+
+**With ES6**
+
+```javascript
+var names = ["Sarah", "Benny", "Felina"];
+
+names.forEach((name) => console.log(`Hello, ${name}!`));
+```
+
+----------
+
+## CoffeeScript patterns
+
+Private functions (declared with an underscore) never use fat arrows (because they are not made to be called from "outside").
+
+**Example**
+
+```coffeescript
+_setup_view_models: ->
 ```
 
 ----------
