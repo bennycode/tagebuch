@@ -1110,3 +1110,43 @@ _setup_view_models: ->
 ```
 
 ----------
+
+## When to use Promises
+
+- [JavaScript Promises in Detail](http://dailyjs.com/2014/02/20/promises-in-detail/)
+
+```coffeescript
+promised_access_token = new Promise((resolve, reject) ->
+ if true
+   resolve 'Result'
+ else
+   reject 'Unknown error'
+)
+```
+
+Promises are a good thing to introduce when one condition of your code is synchronous and the other one asnychronous. With a Promise around this decision you can easily bundle these to worls without the need of a callback. You will also preserve a direct return value which is very nice to have.
+
+If you make use of the `reject` function of a Promise, then you also need to declare a `catch` call when executing your promise.
+
+**Example**
+
+```javascript
+promised_access_token.then(onSuccess).catch(onError);
+```
+
+**Before using a Promise**
+
+```coffeescript
+@_load_access_token (access_token) =>
+  if access_token
+    @init_app()
+  else
+    @redirect_to_login()
+```
+
+**With using a Promise**
+
+```coffeescript
+access_token_promise = @_load_access_token()
+access_token_promise.then(@init_app).catch @redirect_to_login
+```
