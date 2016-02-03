@@ -976,16 +976,12 @@ targetOrigin = ((ref = event.data) != null ? ref.targetOrigin : void 0) != null;
 ## Promise examples with setTimeout
 
 ```javascript
-function async() {
-  var promise = new Promise(function (resolve, reject) {
 
-    window.setTimeout(function () {
-      resolve(72);
-    }, 2000);
-  });
-
-  return promise;
-}
+var async = new Promise(function (resolve, reject) {
+  window.setTimeout(function () {
+    resolve(72);
+  }, 2000);
+});
 
 async().then(function(result){
   console.log(result);
@@ -993,7 +989,7 @@ async().then(function(result){
 ```
 
 ```javascript
-function async() {
+function collectionOfPromises() {
   var promises = [];
   var promise = new Promise(function (resolve, reject) {
     window.setTimeout(function () {
@@ -1011,7 +1007,7 @@ function async() {
   return Promise.all(promises);
 }
 
-async().then(function (results) {
+collectionOfPromises().then(function (results) {
   // Will print 5 results after 2 seconds
   console.log(results);
 });
