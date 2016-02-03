@@ -1150,3 +1150,27 @@ promised_access_token.then(onSuccess).catch(onError);
 access_token_promise = @_load_access_token()
 access_token_promise.then(@init_app).catch @redirect_to_login
 ```
+
+## Smart CoffeeScript
+
+```coffeescript
+# 1. Check timestamp
+filtered = records.filter((record) ->
+  record.meta.timestamp < timestamp
+)
+
+# 2. Sort by timestamp
+filtered.sort (a, b) ->
+  a.meta.timestamp < b.meta.timestamp
+
+# 3. Limit result set to 1
+sliced = filtered.reverse().slice(Math.max(filtered.length - 1, 1))
+```
+
+->
+
+```coffeescript
+records = (record for record in records when record.meta.timestamp < offset) if offset
+sliced = records.slice(0, limit)
+```
+
