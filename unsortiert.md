@@ -580,7 +580,7 @@ if @is_answer() is true and @media_stream() isnt undefined and @has_added_remote
   return true
 ``` 
 
-->
+→
 
 ```coffeescript
 return @is_answer() and @media_stream()? and @has_added_remote_sdp()
@@ -593,7 +593,7 @@ if z.util.Environment.browser.firefox
   signaling_states = [A, B]
 ```
 
-->
+→
 
 ```coffeescript
 signaling_states = [A, B] if z.util.Environment.browser.firefox
@@ -1163,7 +1163,7 @@ filtered.sort (a, b) ->
 sliced = filtered.reverse().slice(Math.max(filtered.length - 1, 1))
 ```
 
-->
+→
 
 ```coffeescript
 records = (record for record in records when record.meta.timestamp < offset) if offset
@@ -1182,7 +1182,7 @@ generic_message_encrypted = cryptobox_session.encrypt generic_message_string
 generic_message_encrypted_base64 = z.util.array_to_base64 generic_message_encrypted
 ```
 
-->
+→
 
 ```coffeescript
 generic_message = new z.proto.GenericMessage z.util.create_random_uuid(), new z.proto.Text message
