@@ -1170,3 +1170,22 @@ records = (record for record in records when record.meta.timestamp < offset) if 
 sliced = records.slice(0, limit)
 ```
 
+## Keep things short
+
+```coffeescript
+# https://github.com/dcodeIO/ProtoBuf.js/wiki/Builder
+generic_message = new z.proto.GenericMessage z.util.create_random_uuid(), new z.proto.Text message
+generic_message_encoded = generic_message.encode()
+generic_message_array_buffer = generic_message_encoded.toArrayBuffer()
+generic_message_string = z.util.array_buffer_to_string generic_message_array_buffer
+generic_message_encrypted = cryptobox_session.encrypt generic_message_string
+generic_message_encrypted_base64 = z.util.array_to_base64 generic_message_encrypted
+```
+
+->
+
+```coffeescript
+generic_message = new z.proto.GenericMessage z.util.create_random_uuid(), new z.proto.Text message
+generic_message_encrypted = cryptobox_session.encrypt generic_message.toArrayBuffer()
+generic_message_encrypted_base64 = z.util.array_to_base64 generic_message_encrypted
+```
