@@ -1189,3 +1189,99 @@ generic_message = new z.proto.GenericMessage z.util.create_random_uuid(), new z.
 generic_message_encrypted = cryptobox_session.encrypt generic_message.toArrayBuffer()
 generic_message_encrypted_base64 = z.util.array_to_base64 generic_message_encrypted
 ```
+
+## Working with Dexie.js
+
+- [Dexie.js: A Minimalistic Wrapper for IndexedDB](http://dexie.org/)
+- Note: Good example to show uselessness of automatic CoffeeScript generation
+
+```javascript
+// Drop database before creating a new one
+var dbName = 'MyFriends';
+var dbSchema = {friends: 'name, age'};
+var db = new Dexie(dbName);
+db.version(1).stores(dbSchema);
+db['open']().then(function () {
+  db['delete']().then(function () {
+    db = new Dexie(dbName);
+    db.version(1).stores(dbSchema);
+    db['open']().then(function () {
+      console.log('Hello database!');
+    }).catch(function (error) {
+    }).finally(function () {
+    });
+  }).catch(function (error) {
+  }).finally(function () {
+  });
+}).catch(function (error) {
+}).finally(function () {
+});
+```
+
+```javascript
+function operate(db, operation, onSuccess, onError, always) {
+  db[operation]().then(function () {
+    if (typeof onSuccess === "function") {
+      onSuccess();
+    }
+  }).catch(function (error) {
+    if (typeof onError === "function") {
+      onError(error);
+    }
+  }).finally(function () {
+    if (typeof always === "function") {
+      always();
+    }
+  });
+}
+
+function createNewDatabase(dbName, dbSchema) {
+  var db = new Dexie(dbName);
+  db.version(1).stores(dbSchema);
+  return db;
+}
+
+function generalErrorHandling(error) {
+  console.error('There was an error: ' + error.message);
+}
+
+// Drop database before creating a new one
+var dbName = 'MyFriends';
+var dbSchema = {friends: 'name, age'};
+var db = createNewDatabase(dbName, dbSchema);
+operate(db, 'open', function () {
+  operate(db, 'delete', function () {
+    var db = createNewDatabase(dbName, dbSchema);
+    operate(db, 'open', function () {
+      console.error('Hello database!');
+    }, generalErrorHandling);
+  }, generalErrorHandling);
+}, generalErrorHandling);
+```
+
+```javascript
+function createNewDatabase(dbName, dbSchema) {
+  var db = new Dexie(dbName);
+  db.version(1).stores(dbSchema);
+  return db;
+}
+
+var dbName = 'MyFriend';
+var dbSchema = {friends: 'name, age'};
+var db = createNewDatabase(dbName, dbSchema);
+db.open()
+  .then(function () {
+    return db.delete();
+  })
+  .then(function () {
+    var db = createNewDatabase(dbName, dbSchema);
+    return db.open();
+  })
+  .then(function () {
+    console.log('Hello database');
+  })
+  .catch(function (error) {
+    console.warn('There was an error: ' + error.message);
+  });
+;
+```
