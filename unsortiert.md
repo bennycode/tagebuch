@@ -1285,3 +1285,48 @@ db.open()
   });
 ;
 ```
+
+**Complex schema**
+
+```javascript
+function createNewDatabase(dbName, dbSchema) {
+  var db = new Dexie(dbName);
+  db.version(1).stores(dbSchema);
+  return db;
+}
+
+var events = [
+  {"raw": {"conversation": "d4ff3d06-771e-461b-b65a-1213a8a4faff", "time": "2016-02-05T16:50:55.574Z", "from": "39b7f597-dfd1-4dff-86f5-fe1b79cb70a0", "type": "conversation.otr-message-add"}, "meta": {"timestamp": 1454691055574, "version": 1}, "mapped": {"data": {"nonce": "d4ff3d06-771e-461b-b65a-1213a8a4faff@39b7f597-dfd1-4dff-86f5-fe1b79cb70a0@1454691055574"}, "from": "39b7f597-dfd1-4dff-86f5-fe1b79cb70a0", "time": "2016-02-05T16:50:55.574Z", "id": "419788d2-9be3-450b-8371-a73cdfe05ede", "conversation": "d4ff3d06-771e-461b-b65a-1213a8a4faff", "type": "conversation.knock"}},
+  {"raw": {"conversation": "d4ff3d06-771e-461b-b65a-1213a8a4faff", "time": "2016-02-05T16:50:48.332Z", "from": "9b47476f-974d-481c-af64-13f82ed98a5f", "type": "conversation.otr-message-add"}, "meta": {"timestamp": 1454691048332, "version": 1}, "mapped": {"data": {"nonce": "d4ff3d06-771e-461b-b65a-1213a8a4faff@9b47476f-974d-481c-af64-13f82ed98a5f@1454691048332", "content": "Test 🔒"}, "from": "9b47476f-974d-481c-af64-13f82ed98a5f", "time": "2016-02-05T16:50:48.332Z", "id": "f0b31281-1e83-4d12-bde7-03e02ddfe103", "type": "conversation.message-add", "conversation": "d4ff3d06-771e-461b-b65a-1213a8a4faff"}}
+];
+
+var dbName = 'Wire';
+var dbSchema = {
+  conversation_events: ', raw.conversation, raw.time, meta.timestamp'
+};
+
+var db = createNewDatabase(dbName, dbSchema);
+db.open()
+  .then(function () {
+    return db.delete();
+  })
+  .then(function () {
+    db = createNewDatabase(dbName, dbSchema);
+    return db.open();
+  })
+  .then(function () {
+    var promises = [];
+    for (var i = 0; i < events.length; i++) {
+      var promise = db['conversation_events'].put(events[i], 'a' + i);
+      promises.push(promise);
+    }
+    return Promise.all(promises);
+  })
+  .then(function () {
+    console.log('Saved all events.');
+  })
+  .catch(function (error) {
+    console.warn('There was an error: ' + error.message);
+  });
+
+```
