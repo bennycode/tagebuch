@@ -1328,5 +1328,11 @@ db.open()
   .catch(function (error) {
     console.warn('There was an error: ' + error.message);
   });
+```
 
+## Catching Errors in Promises
+
+```javascript
+var p = new Promise(function(resolve,reject){reject('mistake');}).catch(function(error){console.log('Catched mistake');});
+var p = new Promise(function(resolve,reject){throw new Error('mistake');}).catch(function(error){console.log('Catched mistake');});
 ```
