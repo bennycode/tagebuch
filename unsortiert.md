@@ -1353,3 +1353,20 @@ var p = new Promise(function(resolve,reject){throw new Error('mistake');}).catch
 ```
 
 - Uses fallthrough-behaviour which cannot be compiled by CoffeeScript
+
+## CoffeeScript Bad Practices
+
+```coffeescript
+      return {} =
+        context: {}
+        events: []
+```
+
+->
+
+```coffeescript
+return {
+  context: {}
+  events: []
+}
+```
