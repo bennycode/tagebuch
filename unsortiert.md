@@ -1332,9 +1332,65 @@ db.open()
 
 ## Catching Errors in Promises
 
+Notice the different on how the error message is printed:
+
 ```javascript
-var p = new Promise(function(resolve,reject){reject('mistake');}).catch(function(error){console.log('Catched mistake');});
-var p = new Promise(function(resolve,reject){throw new Error('mistake');}).catch(function(error){console.log('Catched mistake');});
+// reject
+new Promise(function(resolve, reject) {
+  reject('Stack Overflow');
+})
+.catch(function(error) {
+  console.log('Catched error: ' + error); // Catched error: Stack Overflow
+});
+
+// throw new Error
+new Promise(function(resolve, reject) {
+  throw new Error('Stack Overflow');
+})
+.catch(function(error) {
+  console.log('Catched error: ' + error.message); // Catched error: Stack Overflow
+});
+```
+
+So if you make use of `reject`, then use an `Error` object:
+
+```javascript
+new Promise(function(resolve, reject) {
+  reject(new Error('Stack Overflow'));
+})
+.catch(function(error) {
+  console.log('Catched error: ' + error.message); // Catched error: Stack Overflow
+});
+```
+
+Another approach:
+
+```javascript
+new Promise(function(resolve, reject) {
+  throw new Error('Stack Overflow');
+})
+.then(function(result) {
+  console.log('Everything is cool.');
+}, function(error) {
+  console.log('Catched error: ' + error.message); // Catched error: Stack Overflow
+});
+```
+
+Which compiles down to:
+
+```javascript
+var onSuccess = function(result) {
+  console.log('Everything is cool.');
+};
+
+var onError = function(error) {
+  console.log('Catched error: ' + error.message); // Catched error: Stack Overflow
+};
+
+new Promise(function(resolve, reject) {
+  throw new Error('Stack Overflow');
+})
+.then(onSuccess, onError);
 ```
 
 ## Cannot be compiled in CoffeeScript
