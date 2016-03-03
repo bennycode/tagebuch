@@ -1370,3 +1370,21 @@ return {
   events: []
 }
 ```
+
+## Why operators are cool
+
+**Without operator**
+
+```javascript
+42.toString(); // Uncaught SyntaxError: Unexpected token ILLEGAL
+
+var number = 42;
+number.toString(); // "42"
+```
+
+**With operator**
+
+```javascript
+42+''; // "42"
+```
+
