@@ -1163,6 +1163,12 @@ filtered.sort (a, b) ->
 sliced = filtered.reverse().slice(Math.max(filtered.length - 1, 1))
 ```
 
+**Filter items which are undefined**
+
+```coffeescript
+session_ids = session_ids.filter (x) -> x isnt undefined
+```
+
 →
 
 ```coffeescript
@@ -1391,6 +1397,51 @@ new Promise(function(resolve, reject) {
   throw new Error('Stack Overflow');
 })
 .then(onSuccess, onError);
+```
+
+### Catching all rejections in a Promise.all
+
+`Promise.all` rejects as soon as one `Promise` rejects, so we have to use `Promise.settle`.
+
+**Example**
+
+## Promise terminology
+
+- http://www.html5rocks.com/en/tutorials/es6/promises/
+
+## Promise Playground
+
+### Find odd numbers with Promises
+
+*Idea: Give people code comments and they have to assign them to code blocks*
+
+```javascript
+function isOdd(number) {
+  return !!(number % 2);
+}
+
+var promises = [];
+
+for (var i = 1; i < 11; i++) {
+  var promise = new Promise(function(resolve, reject) {
+    if (isOdd(i)) {
+      resolve(i);
+    } else {
+      resolve(undefined);
+    }
+  });
+
+  promises.push(promise);
+}
+
+Promise.all(promises).then(function(results) {
+  // Filter 'undefined' results
+  var oddNumbers = results.filter(function(number) {
+    return number !== undefined;
+  });
+
+  console.log('Odd numbers', oddNumbers);
+});
 ```
 
 ## Cannot be compiled in CoffeeScript
