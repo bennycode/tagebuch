@@ -1495,3 +1495,34 @@ number.toString(); // "42"
 42+''; // "42"
 ```
 
+## Testing
+
+### Behavior Driven Development
+
+#### Test Runner
+
+```coffeescript
+describe 'Conversation Repository', ->
+  conversation_repository = new z.conversation.ConversationRepository()
+
+  describe 'handles member join correctly', ->
+    beforeEach -> spyOn(conversation_repository, 'member_join').and.callThrough()
+    member_join_event = id: 1421, status: 'cancelled'
+      
+    it 'evaluates a member join event if joining a group conversation', ->
+      conversation_repository.on_conversation_event member_join_event
+      expect(conversation_repository.member_join).toHaveBeenCalled()
+
+    it 'ignores a member join event if joining a one-to-one conversation', ->
+      connection = new z.connection.Connection()
+      connection.conversation_id = conversation_repository.get_current().id
+      connection.status z.connection.ConnectionStatus.PENDING
+      conversation_repository.on_conversation_event member_join_event
+      expect(conversation_repository.member_join).not.toHaveBeenCalled()
+
+###
+  Execution by Karma generates the following sentences:
+  Chromium 37.0.2062 (Ubuntu 0.0.0) Conversation Repository handles member join correctly evaluates a member join event if joining a group conversation
+  Chromium 37.0.2062 (Ubuntu 0.0.0) Conversation Repository handles member join correctly ignores a member join event if joining a one-to-one conversation
+###
+```
