@@ -475,6 +475,12 @@ return (function() {
 }).call(this);
 ```
 
+**Filter "undefined" values from array**
+
+```coffeescript
+array_values = array_values.filter (x) -> x isnt undefined
+```
+
 ---
 
 **IIFE**
