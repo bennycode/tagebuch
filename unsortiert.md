@@ -450,6 +450,31 @@ In JavaScript:
 Proteus.errors.DecodeError.prototype.INVALID_TYPE;
 ```
 
+**The Power of CoffeeScript**
+
+```coffeescript
+return (device for device in @encryption_repository.devices() when device.id isnt @current_client()?.id)
+```
+
+Generates
+
+```javascript
+var device;
+
+return (function() {
+  var i, len, ref, ref1, results;
+  ref = this.encryption_repository.devices();
+  results = [];
+  for (i = 0, len = ref.length; i < len; i++) {
+    device = ref[i];
+    if (device.id !== ((ref1 = this.current_client()) != null ? ref1.id : void 0)) {
+      results.push(device);
+    }
+  }
+  return results;
+}).call(this);
+```
+
 ---
 
 **IIFE**
@@ -1494,6 +1519,8 @@ number.toString(); // "42"
 ```javascript
 42+''; // "42"
 ```
+
+---
 
 ## Testing
 
