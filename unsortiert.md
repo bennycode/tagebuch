@@ -481,6 +481,20 @@ return (function() {
 array_values = array_values.filter (x) -> x isnt undefined
 ```
 
+**Array Shortcuts**
+
+```coffeescript
+for client in all_clients
+  client_et = @client_mapper.map_client client
+  client_ets.push client_et
+```
+
+->
+
+```coffeescript
+clients_ets = (@client_mapper.map_client client for client in all_clients)
+```
+
 ---
 
 **IIFE**
@@ -1559,3 +1573,51 @@ describe 'Conversation Repository', ->
   Chromium 37.0.2062 (Ubuntu 0.0.0) Conversation Repository handles member join correctly ignores a member join event if joining a one-to-one conversation
 ###
 ```
+
+---
+
+## Checklists
+
+### Methodologies
+
+- http://12factor.net/
+
+### Tücken beim Laden von Daten aus einer Datenbank
+
+- [ ] Datenzugriff wird verwehrt
+- [ ] Daten sind nicht verfügbar
+- [ ] Daten sind korrupt
+- [ ] Daten sind veraltet
+- [ ] Daten sind veraltet und entsprechen nicht dem aktuellen Datenbank-Schema
+- [ ] Daten sind aktuelll aber entsprechen nicht dem aktuellen Datenbank-Schema
+
+## Unicodes
+
+### Emojis
+
+Character: ✒
+Chracter Name: Black Nib
+Number (Decimal): 10002
+Number (UTF-8): E29C92
+Number (UTF-16): 2712
+Unicode Code Point: U+2712 (U+2712)
+HTML Entity (Decimal): &#10002;
+HTML Entity (Hexadecimal): &#x2712;
+URL Escape Code: %E2%9C%92
+JavaScript String: "\u2712"
+Emoji Shortcode: :black_nib: 
+
+Character: 🤖
+Chracter Name: Robot Face
+Number (Decimal): 129302
+Number (UTF-8): F09FA496
+Number (UTF-16): D83EDD16
+Unicode Code Point: U+1F916 (U+1F916)
+HTML Entity (Decimal): &#129302;
+HTML Entity (Hexadecimal): &#x1F916;
+URL Escape Code: %F0%9F%A4%9
+JavaScript String: -
+Emoji Shortcode: - 
+
+---
+
