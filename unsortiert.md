@@ -475,6 +475,21 @@ return (function() {
 }).call(this);
 ```
 
+**Shorthands**
+
+```coffeescript
+for client in @clients()
+  if client.id is client_id
+   @clients.remove client
+   break
+```
+
+```coffeescript
+for client in @clients() when client.id is client_id
+  @clients.remove client
+  break
+```
+
 **Filter "undefined" values from array**
 
 ```coffeescript
@@ -1595,6 +1610,9 @@ describe 'Conversation Repository', ->
 
 ### Emojis
 
+- http://graphemica.com/%E2%98%BB
+- 
+
 Character: ✒
 Chracter Name: Black Nib
 Number (Decimal): 10002
@@ -1621,3 +1639,35 @@ Emoji Shortcode: -
 
 ---
 
+## Keys & Values
+
+```coffee
+window.z ?= {}
+z.client ?= {}
+
+z.client.ClientError =
+  MISSING_ON_BACKEND: 'missing_on_backend'
+  NO_LOCAL_CLIENT: 'no_local_client'
+```
+
+->
+
+```coffee
+window.z ?= {}
+z.client ?= {}
+
+z.client.ClientError =
+  MISSING_ON_BACKEND: 'MISSING_ON_BACKEND'
+  NO_LOCAL_CLIENT: 'NO_LOCAL_CLIENT'
+```
+
+->
+
+```coffee
+window.z ?= {}
+z.client ?= {}
+
+z.client.ClientError =
+  MISSING_ON_BACKEND: 'z.client.ClientError.MISSING_ON_BACKEND'
+  NO_LOCAL_CLIENT: 'z.client.ClientError.NO_LOCAL_CLIENT
+```
