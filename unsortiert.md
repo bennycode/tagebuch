@@ -1671,3 +1671,39 @@ z.client.ClientError =
   MISSING_ON_BACKEND: 'z.client.ClientError.MISSING_ON_BACKEND'
   NO_LOCAL_CLIENT: 'z.client.ClientError.NO_LOCAL_CLIENT
 ```
+
+---
+
+## How to interrupt Promise chains
+
+### Alternative 1: Create an unresolved Promsise
+
+```coffee
+      .then (local_identity) =>
+        return {} if not local_identity
+        if skip_sessions
+          @logger.log 'Initialized repository and skipped loading of sessions and pre-keys'
+          return new Promise => resolve @
+        else
+          deserialise_sessions = (buffer) -> Proteus.session.Session.deserialise local_identity, buffer
+          return @_load_store @storage_service.OBJECT_STORE_SESSIONS, deserialise_sessions
+      .then (sessions) =>
+        @sessions = sessions
+        @logger.log @logger.levels.INFO, "Loaded '#{Object.keys(@sessions).length}' sessions from database", @sessions
+        return @_load_store @storage_service.OBJECT_STORE_PREKEYS, Proteus.keys.PreKey.deserialise
+```
+
+### Alternative 2: Throw a defined error
+
+```coffee
+```
+
+### Alternative 3: reject
+
+```coffee
+```
+
+### Alternative 3: Nested Promises
+
+```coffee
+```
