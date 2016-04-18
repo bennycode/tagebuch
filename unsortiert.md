@@ -1707,3 +1707,27 @@ z.client.ClientError =
 
 ```coffee
 ```
+
+## Functional operators in Java
+
+**Without**
+
+```java
+for (Node node : nodes) {
+  if (node instanceof HeaderNode) {
+    HeaderNode headerNode = (HeaderNode) node;
+    String text = getTextContent(node);
+  }
+}
+```
+
+**With Functional Operation**
+
+```java
+nodes.stream().filter((node) -> (node instanceof HeaderNode)).map((node) -> {
+  HeaderNode headerNode = (HeaderNode) node;
+  return node;
+}).forEach((node) -> {
+  String text = getTextContent(node);
+});
+```
