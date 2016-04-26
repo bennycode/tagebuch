@@ -1755,11 +1755,19 @@ spyOn(Contact, 'retrieveContactInfo').and.callFake(function() {
 expect(StoreService.listStores).toHaveBeenCalled();
 ```
 
+**Faking a Promise object**
+
+```javascript
+return {
+  then: function(callback) { return callback(user); }
+};
+```
+
 **IMPORTANT:** 
 
 - `done` is needed to make the test async
 
-```coffee
+```coffeescript
   describe '_get_clients_by_user_id', ->
     it 'does something', (done) ->
       payload_for_clients = [{
