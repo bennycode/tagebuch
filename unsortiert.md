@@ -1795,3 +1795,31 @@ return {
         console.log 'ERROR'
         fail error
 ```
+
+### Fake server responses
+
+```coffeescript
+# Fake server
+server = sinon.fakeServer.create()
+server.autoRespond = true
+
+url = "https://localhost:8888/some/url"
+server.respondWith 'GET', url, [
+  200
+  'Content-Type': 'application/json'
+  JSON.stringify ['faked', 'data']
+]
+
+afterEach -> server.restore()
+
+describe '_get_clients_by_user_id', ->
+  it 'does something', (done) ->
+    client_repository.get_clients_by_user_id 42
+    .then ->
+      expect('A').toBe 'A'
+      done()
+    .catch (error) ->
+      console.log 'ERROR'
+      fail error
+```
+
