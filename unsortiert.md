@@ -1731,3 +1731,59 @@ nodes.stream().filter((node) -> (node instanceof HeaderNode)).map((node) -> {
   String text = getTextContent(node);
 });
 ```
+
+### Best practices wisdoms
+
+Always return Objects if possible (instead of Arrays). Later it will save you lots of time if you already have associative arrays.
+
+### Testing Promises
+
+```coffee
+  beforeEach ->
+    spyOn(client_service, 'get_clients_by_user_id').and.returnValue Promise.resolve(['a'])
+```
+
+```javascript`
+spyOn(StoreService, 'listStores').and.callThrough();
+
+spyOn(Contact, 'retrieveContactInfo').and.callFake(function() {
+  return {
+	then: function(callback) { return callback(user); }
+  };
+});
+
+expect(StoreService.listStores).toHaveBeenCalled();
+```
+
+**IMPORTANT:** 
+
+- `done` is needed to make the test async
+
+```coffee
+  describe '_get_clients_by_user_id', ->
+    it 'does something', (done) ->
+      payload_for_clients = [{
+        "id": "1c6ecb6ab34d2f52",
+        "class": "desktop",
+        "meta": {"is_verified": false, "primary_key": "c31e8831-d6b7-4c8d-adb0-c169a6e0e625@1c6ecb6ab34d2f52"}
+      }, {
+        "id": "7cc2cd6b6a8a01ea",
+        "class": "phone",
+        "meta": {"is_verified": false, "primary_key": "c31e8831-d6b7-4c8d-adb0-c169a6e0e625@7cc2cd6b6a8a01ea"}
+      }, {
+        "id": "c11cbef4f403ac25",
+        "class": "desktop",
+        "meta": {"is_verified": false, "primary_key": "c31e8831-d6b7-4c8d-adb0-c169a6e0e625@c11cbef4f403ac25"}
+      }]
+
+
+      spyOn(client_service, 'get_clients_by_user_id').and.returnValue Promise.resolve(['a'])
+
+      client_repository.get_clients_by_user_id entities.user.john_doe.id
+      .then ->
+        expect('A').toBe 'A'
+        done()
+      .catch (error) ->
+        console.log 'ERROR'
+        fail error
+```
