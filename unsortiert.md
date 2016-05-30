@@ -1796,6 +1796,8 @@ return {
         fail error
 ```
 
+- Jasmine Spy Cheatsheet: http://tobyho.com/2011/12/15/jasmine-spy-cheatsheet/
+
 ### Fake server responses
 
 ```coffeescript
@@ -1823,3 +1825,124 @@ describe '_get_clients_by_user_id', ->
       fail error
 ```
 
+## CoffeeScript shortcuts
+
+```coffeescript
+client_ets = []
+
+for client_payload in client_payloads
+  client_ets.push @map_client client_payload
+```
+
+```coffeescript
+return (@map_client client_payload for client_payload in client_payloads)
+```
+
+----------
+
+## Object.freeze
+
+- Schutz vor Überschreibung von Methoden
+
+Build example with:
+
+- https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor
+
+----------
+
+```coffeescript
+current_client = ko.observable(new z.client.Client({id: z.util.create_random_uuid()}));
+```
+
+->
+
+```coffeescript
+client = new z.client.Client()
+client.id = z.util.create_random_uuid()
+current_client = ko.observable client
+```
+
+```coffescript
+    for user_et in user_ets
+      user_client_map[user_et.id] = [] if user_et.devices()[0]?
+      for client_et in user_et.devices()
+        user_client_map[user_et.id].push client_et.id
+```
+
+->
+
+```coffeescript
+    for user_et in user_ets when user_et.devices()[0]
+      user_client_map[user_et.id] = (client_et.id for client_et in user_et.devices())
+```
+
+----------
+
+## TypeScript Type Definitions
+
+**typings.json**
+
+```json
+{
+  "globalDependencies": {
+    "jasmine": "registry:dt/jasmine#2.2.0+20160505161446"
+  }
+}
+```
+
+**Type Definitions Repository**
+- https://github.com/DefinitelyTyped/DefinitelyTyped
+- http://definitelytyped.org/
+- https://github.com/typings/registry
+
+**TypeScript Definition Manager**
+- https://github.com/typings/typings
+
+**Install Typings**
+```bash
+typings search --name react
+typings install dt~mocha --global --save
+// dt - typings from DefinitelyTyped
+npm typings -- install dt~jasmine --save --global
+typings install jquery --save --ambient
+typings install github:DefinitelyTyped/DefinitelyTyped/angularjs/angular.d.ts#17ef40452039d19e06dc2a3815ea898c505860fa --ambient
+```
+
+## How to install Type Definitions
+
+There are `globalDependencies` and `dependencies`.
+
+Example: `typings install dt~dexie --save` or `typings install dt~dexie --save --global` (since Typings 1.0 `ambient` means also `global`).
+
+```
+typings install github:dfahlander/Dexie.js/blob/master/src/Dexie.d.ts
+// ERR! caused by https://raw.githubusercontent.com/dfahlander/Dexie.js/master/blob/master/src/Dexie.d.ts responded with 404, expected it to equal 200
+->
+typings install github:dfahlander/Dexie.js/src/Dexie.d.ts
+// badlocation "github:dfahlander/Dexie.js/src/Dexie.d.ts" is mutable and may change, consider specifying a commit hash
+->
+typings install github:dfahlander/Dexie.js/src/Dexie.d.ts#d271a952f2fed858bd6a25bfb2c4f5e8a55eaba3 --save --global
+// Attempted to compile "Dexie" as a global module, but it looks like an external module.
+->
+typings install github:dfahlander/Dexie.js/src/Dexie.d.ts#d271a952f2fed858bd6a25bfb2c4f5e8a55eaba3 --save
+// Woohooo! 
+```
+
+Generates:
+
+**typings.json**
+```json
+{
+  "dependencies": {
+    "Dexie": "github:dfahlander/Dexie.js/src/Dexie.d.ts#d271a952f2fed858bd6a25bfb2c4f5e8a55eaba3"
+  }
+}
+```
+
+Reference Typing:
+
+```typescript
+/// <reference path="../../typings/modules/Dexie/index.d.ts" />
+import {Dexie} from "Dexie";
+```
+ 
