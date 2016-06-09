@@ -1906,6 +1906,7 @@ typings install dt~mocha --global --save
 npm typings -- install dt~jasmine --save --global
 typings install jquery --save --ambient
 typings install github:DefinitelyTyped/DefinitelyTyped/angularjs/angular.d.ts#17ef40452039d19e06dc2a3815ea898c505860fa --ambient
+typings install github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#36a1be34dbe202c665b3ddafd50824f78c09eea3 --save --global
 ```
 
 ## How to install Type Definitions
@@ -1945,4 +1946,253 @@ Reference Typing:
 /// <reference path="../../typings/modules/Dexie/index.d.ts" />
 import {Dexie} from "Dexie";
 ```
+
+## TLDR;
+
+1. Check: 
+`https://github.com/dfahlander/Dexie.js/blob/master/src/Dexie.d.ts`
+2. Get latest (or suitable) commit hash: 
+`https://github.com/dfahlander/Dexie.js/commit/d271a952f2fed858bd6a25bfb2c4f5e8a55eaba3`
+3. Combine these: 
+`typings install github:dfahlander/Dexie.js/src/Dexie.d.ts#d271a952f2fed858bd6a25bfb2c4f5e8a55eaba3 --save`
+4. Reference typings in TypeScript file: 
+`///<reference path="../../typings/modules/Dexie/index.d.ts"/>`
+5. Use module: 
+`import Dexie from "dexie";`
+
+### Multiple ways of writing CoffeeScript
+
+**Output**
+```javascript
+var idx = this.recv_chains.findIndex(function(c) {
+  return c.ratchet_key.fingerprint() === msg.ratchet_key.fingerprint();
+});
+```
+
+**Input**
+```coffeescript
+idx = @recv_chains.findIndex (c) ->
+  c.ratchet_key.fingerprint() is msg.ratchet_key.fingerprint()
+```
+
+**Input**
+```coffeescript
+idx = @recv_chains.findIndex((c) -> c.ratchet_key.fingerprint() is msg.ratchet_key.fingerprint())
+```
  
+### API samples
+
+**Array.prototype.findIndex**
+
+```javascript
+var index = [{name:'Lipis'},{name:'Benny'},{name:'René'}].findIndex(function(element){return element.name === 'René'});
+// 2
+``` 
+
+## WebStorm
+
+### Shortcuts
+
+- `script:src` + `Tab`
+
+## Node.js
+
+### Simple Webserver
+
+#### First
+
+**server.js**
+
+```javascript
+var fs = require('fs');
+var http = require('http');
+var url = require('url');
+
+var port = 3001;
+var server = http.createServer(function (request, response) {
+  console.log('Request on: ' + request.url);
+  var urlObject = url.parse(request.url, true);
+
+  var length = urlObject.query['length'];
+  var width = urlObject.query['width'];
+  var perimeter = 2 * (length + width);
+
+  response.writeHead(200, {'Content-Type': 'text/html'});
+  response.write(perimeter + '');
+  response.end();
+});
+
+console.log('Starting server on port: ' + port);
+server.listen(3001);
+```
+
+#### Second
+
+**calc.js**
+
+```javascript
+// Note: Improve "calc.js" so that it always returns a String
+module.exports.perimeter = function (length, width) {
+  return 2 * (length + width);
+};
+```
+
+**server.js**
+
+```javascript
+var calc = require('./calc.js');
+var fs = require('fs');
+var http = require('http');
+var url = require('url');
+
+var port = 3001;
+var server = http.createServer(function (request, response) {
+  console.log('Request on: ' + request.url);
+  var urlObject = url.parse(request.url, true);
+
+  var length = urlObject.query['length'];
+  var width = urlObject.query['width'];
+  var perimeter = calc.perimeter(length, width);
+
+  response.writeHead(200, {'Content-Type': 'text/html'});
+  response.write(perimeter + '');
+  response.end();
+});
+
+console.log('Starting server on port: ' + port);
+server.listen(3001);
+```
+
+#### Using code in Browser
+
+**calc-browser-main.js**
+
+```javascript
+var calc = require('./calc.js');
+var length = 4;
+var width = 5;
+var perimeter = calc.perimeter(length, width);
+console.log(perimeter);
+```
+
+```bash
+browserify calc-browser-main.js -o calc-browserified-main.js
+```
+
+**calc-browserified-main.js**
+
+```javascript
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var calc = require('./calc.js');
+var length = 4;
+var width = 5;
+var perimeter = calc.perimeter(length, width);
+console.log(perimeter);
+},{"./calc.js":2}],2:[function(require,module,exports){
+module.exports.perimeter = function (length, width) {
+  return 2 * (length + width);
+};
+},{}]},{},[1]);
+```
+
+**index.html**
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta charset="UTF-8" />
+    <script src="calc-browserified-main.js"></script>
+  </head>
+  <body>
+  </body>
+</html>
+```
+
+----------
+
+## TypeScript with Node.js
+
+- https://basarat.gitbooks.io/typescript/content/docs/quick/nodejs.html
+
+```bash
+typings init
+typings install dt~node --save --global
+```
+
+```javascript
+function perimeter(length, width) {
+    return 2 * (length + width);
+}
+
+module.exports = perimeter;
+```
+
+```typescript
+///<reference path="../../typings/index.d.ts"/>
+
+function perimeter(length:number, width:number) {
+    return 2 * (length + width);
+}
+
+module.exports = perimeter;
+```
+
+```javascript
+var fs = require('fs');
+```
+
+```typescript
+import fs = require('fs');
+```
+
+## Node.js
+
+Example from Karma: https://github.com/karma-runner/karma/blob/master/lib/index.js
+
+**index.js**
+```javascript
+var Server = require('./server')
+```
+
+**server.js**
+```javascript
+var Server = function () {}
+
+Server.prototype.start = function () {
+  //
+}
+
+module.exports = Server;
+```
+
+**consumer.js**
+```javascript
+var Server = require('karma').Server;
+```
+
+## Import Node modules in TypeScript
+
+```typescript
+/// <reference path="node.d.ts" />
+import http = module('http');
+```
+
+## Benny's TypeScript project
+- `typings install dt~bunyan --save --global`
+
+**Module 'path' has no default export**
+-> `import * as fs from 'fs';`
+
+You can use your syntax if the module has a default export. Example:
+
+```typescript
+// foo.ts
+export default class Foo {
+}
+
+// bar.ts
+import Foo from './foo';
+new Foo();
+```
