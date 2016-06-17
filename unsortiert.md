@@ -1903,7 +1903,7 @@ current_client = ko.observable client
 typings search --name react
 typings install dt~mocha --global --save
 // dt - typings from DefinitelyTyped
-npm typings -- install dt~jasmine --save --global
+typings install dt~jasmine --save --global
 typings install jquery --save --ambient
 typings install github:DefinitelyTyped/DefinitelyTyped/angularjs/angular.d.ts#17ef40452039d19e06dc2a3815ea898c505860fa --ambient
 typings install github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#36a1be34dbe202c665b3ddafd50824f78c09eea3 --save --global
@@ -1949,6 +1949,8 @@ import {Dexie} from "Dexie";
 
 ## TLDR;
 
+**First example**
+
 1. Check: 
 `https://github.com/dfahlander/Dexie.js/blob/master/src/Dexie.d.ts`
 2. Get latest (or suitable) commit hash: 
@@ -1959,6 +1961,16 @@ import {Dexie} from "Dexie";
 `///<reference path="../../typings/modules/Dexie/index.d.ts"/>`
 5. Use module: 
 `import Dexie from "dexie";`
+
+**Second example**
+
+```bash
+typings install dt~es6-promise --save --global
+```
+
+```typescript
+import {Promise} from "es6-promise";
+```
 
 ### Multiple ways of writing CoffeeScript
 
@@ -2195,4 +2207,184 @@ export default class Foo {
 // bar.ts
 import Foo from './foo';
 new Foo();
+```
+
+## Definitions
+
+**Write definition file**
+
+Consumer:
+
+```typescript
+import {Promise} from "es6-promise";
+
+interface CryptoboxStore {
+  loadIdentity():Promise<Proteus.keys.IdentityKeyPair>;
+  loadSession(identity:Proteus.keys.IdentityKeyPair, session_id:string):Promise<Proteus.session.Session>;
+  savePrekey(key:Proteus.keys.PreKey):Promise; 
+}
+```
+
+**Proteus definition**
+
+```typescript
+declare module Proteus {
+  module keys {
+    class IdentityKeyPair {}
+    class PreKey {}
+  }
+
+  module session {
+    class Session {}
+  }
+}
+```
+
+## Beautiful code
+
+**Iteration 1**
+
+```javascript
+function getSourceMapFromSource(sourcePath) {
+  return new Promise(function (resolve, reject) {
+    fs.readFile(sourcePath, "utf8", function (error, data) {
+      if (error) {
+        reject(error);
+      } else {
+        data.split("\n").forEach(function (line) {
+          var match = line.match(/(?:\/\/|\/\*) *# *sourceMappingURL *= *([^ ]*)/);
+
+          if (match) {
+            var sourceMapPath = URI(match[1]).absoluteTo(sourcePath).toString();
+            resolve(sourceMapPath);
+          }
+        });
+      }
+    });
+  });
+}
+```
+
+
+**Iteration 2**
+
+```javascript
+function parseSourceMappingURL(data, sourcePath) {
+  var sourceMapPath = undefined;
+
+  data.split("\n").forEach(function (line) {
+    var match = line.match(/(?:\/\/|\/\*) *# *sourceMappingURL *= *([^ ]*)/);
+    if (match) {
+      sourceMapPath = URI(match[1]).absoluteTo(sourcePath).toString();
+    }
+  });
+
+  return sourceMapPath;
+}
+
+function getSourceMapFromSource(sourcePath) {
+  return new Promise(function (resolve, reject) {
+    fs.readFile(sourcePath, "utf8", function (error, data) {
+      if (error) reject(error);
+      resolve(parseSourceMappingURL(data, sourcePath));
+    });
+  });
+}
+```
+
+**Iteration 3**
+
+```javascript
+function parseSourceMappingURL(data, sourcePath) {
+  var sourceMapPath = undefined;
+  var FIND_SOURCE_MAP_URL = new RegExp('(?:\/\/|\/\*) *# *sourceMappingURL *= *([^ ]*)');
+
+  data.split("\n").forEach(function (line) {
+    var match = line.match(FIND_SOURCE_MAP_URL);
+    if (match) {
+      sourceMapPath = URI(match[1]).absoluteTo(sourcePath).toString();
+    }
+  });
+
+  return sourceMapPath;
+}
+
+function getSourceMapFromSource(sourcePath) {
+  return new Promise(function (resolve, reject) {
+    fs.readFile(sourcePath, 'utf8', function (error, data) {
+      if (error) reject(error);
+      resolve(parseSourceMappingURL(data, sourcePath));
+    });
+  });
+}
+```
+
+## TypeScript
+
+### Use Interface
+
+**Definition**
+
+```typescript
+import {Promise} from "es6-promise";
+
+interface CryptoboxStore {
+  load_identity():Promise<Proteus.keys.IdentityKeyPair>;
+  save_identity(identity:Proteus.keys.IdentityKeyPair):Promise;
+
+  load_session(identity:Proteus.keys.IdentityKeyPair, session_id:string):Promise<Proteus.session.Session>;
+  save_session(session_id:string, session:Proteus.session.Session):Promise;
+  delete_session(session_id:string):Promise;
+
+  load_prekey(prekey_id:number):Promise<Proteus.keys.PreKey>;
+  add_prekey(key:Proteus.keys.PreKey):Promise;
+  delete_prekey(prekey_id:number):Promise;
+}
+
+export default CryptoboxStore;
+```
+
+**Consumer**
+
+```typescript
+import CryptoboxStore from "./CryptoboxStore.ts";
+
+
+class StorageService implements CryptoboxStore {
+  ...
+}
+
+module.exports = StorageService;
+```
+
+## Java & JavaScript
+
+### Main function
+
+**Java**
+
+```java
+public static void main(String[] args) {
+  System.out.println("Arguments: " + args.length);
+}
+```
+
+**variable arity parameter (Varargs)**
+
+- http://docs.oracle.com/javase/1.5.0/docs/guide/language/varargs.html
+- Java SE 5+
+
+```java
+public static void main(String... args) {
+  System.out.println("Arguments: " + args.length);
+}
+```
+
+**JavaScript**
+
+```javascript
+window.addEventListener("DOMContentLoaded", function main(loadEvent) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  console.log("Arguments: " + args.length);
+}, false);
 ```
