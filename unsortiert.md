@@ -2286,6 +2286,7 @@ function getSourceMapFromSource(sourcePath) {
   return new Promise(function (resolve, reject) {
     fs.readFile(sourcePath, "utf8", function (error, data) {
       if (error) reject(error);
+// else!!!
       resolve(parseSourceMappingURL(data, sourcePath));
     });
   });
