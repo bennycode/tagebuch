@@ -383,12 +383,13 @@ var buffer = new ArrayBuffer(8);
 console.log(buffer.byteLength); // 8 bytes long buffer (all bytes are pre-initialized to 0)
 
 // Read data into buffer
-var arrayBuffer = new ArrayBuffer(8);
-var array = [0, 0, 0, 0, 0, 0, 0, 0];
-var arrayBufferView = new Uint8Array(buffer);
+var array = [1, 2, 3, 4, 5, 6, 7, 8];
+var arrayBuffer = new ArrayBuffer(array.length);
+var arrayBufferView = new Uint8Array(arrayBuffer);
 for (var i = 0; i < arrayBufferView.length; i++) {
   arrayBufferView[i] = array[i];
 }
+sodium.to_base64(arrayBufferView); // "AQIDBAUGBwg="
 ```
 
 **Bad JavaScript comments**
