@@ -1910,6 +1910,9 @@ typings install github:DefinitelyTyped/DefinitelyTyped/angularjs/angular.d.ts#17
 typings install github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#36a1be34dbe202c665b3ddafd50824f78c09eea3 --save --global
 ```
 
+**Legend**
+- `typings install dt~node --global --save` (`dt~` for [DefinitelyTyped repo](http://definitelytyped.org/), `--global` because `node` is a global module and `--save` to save the reference into `typings.json`)
+
 ## How to install Type Definitions
 
 There are `globalDependencies` and `dependencies`.
@@ -2390,3 +2393,213 @@ window.addEventListener("DOMContentLoaded", function main(loadEvent) {
   console.log("Arguments: " + args.length);
 }, false);
 ```
+
+---
+
+## Exporting a namespace
+
+### Iteration
+
+Ausgangslage:
+
+```typescript
+class Student {
+  private name:string;
+
+  constructor(first:string, last:string) {
+    this.name = `${first} ${last}`;
+  }
+
+  getName():string {
+    return this.name;
+  }
+}
+```
+
+```javascript
+var Student = (function () {
+  function Student(first, last) {
+    this.name = first + " " + last;
+  }
+
+  Student.prototype.getName = function () {
+    return this.name;
+  };
+  return Student;
+}());
+```
+
+Problem: Self-closing function, lässt sich nicht direkt initieren.
+
+### Iteration
+
+```typescript
+export class Student {
+  private name:string;
+
+  constructor(first:string, last:string) {
+    this.name = `${first} ${last}`;
+  }
+
+  getName():string {
+    return this.name;
+  }
+}
+```
+
+```javascript
+"use strict";
+var Student = (function () {
+    function Student(first, last) {
+        this.name = first + " " + last;
+    }
+    Student.prototype.getName = function () {
+        return this.name;
+    };
+    return Student;
+}());
+exports.Student = Student;
+```
+
+Problem: `Uncaught ReferenceError: exports is not defined`
+
+### Iteration
+
+#### The Hard Way
+
+- Install `typings`
+- Install `browserify`
+- Remove `export` from TypeScript file
+- Add `module.exports = Student;` in TypeScript file
+- Install typings for `node` to use keyword `module` in TypeScript file (`typings install dt~node --global --save`)
+- Reference `node` definition file in TypeScript file (`/// <reference path="../typings/globals/node/index.d.ts" />`)
+- Transpile TypeScript file (`tsc -p tsconfig.json`)
+- Add `exports.js` to export the transpiled `Student` class to the global namespace
+- Browserify `exports.js` (`browserify exports.js -o browserified.js`)
+- Use `browserified.js`
+
+**ts/Student.ts**
+ 
+```typescript
+/// <reference path="../typings/globals/node/index.d.ts" />
+
+class Student {
+  private name:string;
+
+  constructor(first:string, last:string) {
+    this.name = `${first} ${last}`;
+  }
+
+  getName():string {
+    return this.name;
+  }
+}
+
+module.exports = Student;
+```
+
+**ts/exports.js** 
+
+```javascript
+window.Student = require('./Student.js');
+```
+
+**tsconfig.json**
+
+```json
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "sourceMap": true,
+    "target": "ES5"
+  },
+  "exclude": [
+    "node_modules",
+    "typings/browser",
+    "typings/browser.d.ts"
+  ]
+}
+```
+
+**typings.json**
+
+```json
+{
+  "globalDependencies": {
+    "node": "registry:dt/node#6.0.0+20160621231320"
+  }
+}
+```
+
+**ts/index.html**
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <script src="browserified.js"></script>
+</head>
+<body>
+<script>
+    var benny = new Student("Benny", "Neugebauer");
+    console.log(benny.getName());
+</script>
+</body>
+</html>
+```
+
+#### Simplified
+
+```typescript
+module bennyn {
+  export module school {
+    export class Student {
+      private name:string;
+
+      constructor(first:string, last:string) {
+        this.name = `${first} ${last}`;
+      }
+
+      getName():string {
+        return this.name;
+      }
+    }
+  }
+}
+```
+
+**Transpilation**
+
+```javascript
+var bennyn;
+(function (bennyn) {
+  var school;
+  (function (school) {
+    var Student = (function () {
+      function Student(first, last) {
+        this.name = first + " " + last;
+      }
+
+      Student.prototype.getName = function () {
+        return this.name;
+      };
+      return Student;
+    }());
+    school.Student = Student;
+  })(school = bennyn.school || (bennyn.school = {}));
+})(bennyn || (bennyn = {}));
+```
+
+**Execution**
+
+```javascript
+var benny = new bennyn.school.Student("Benny", "Neugebauer");
+console.log(benny.getName());
+```
+ 
