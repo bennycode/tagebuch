@@ -2603,3 +2603,222 @@ var benny = new bennyn.school.Student("Benny", "Neugebauer");
 console.log(benny.getName());
 ```
  
+### Imports
+
+**Version 1**
+
+- Export / Provide module
+```typescript
+class StorageService {...}
+
+export default StorageService;
+module.exports = StorageService;
+```
+
+- Consume / Use module
+```typescript
+import StorageService from "./StorageService";
+```
+
+**Version 2**
+
+- Export / Provide module
+```typescript
+export namespace z {
+  export module storage {
+    export class StorageService {...}
+  }
+}
+```
+
+- Consume / Use module
+```typescript
+import {z} from './StorageService';
+```
+
+### Simple WORKING sample (in one file)
+
+```typescript
+import Dexie from "dexie";
+
+namespace z {
+  export namespace storage {
+    export class StorageService {
+      constructor(public db: Dexie) {
+        console.log(`Initialized with '${db.name}'`);
+      }
+    }
+
+    export class CryptoboxRepository {
+      constructor(private storageService: StorageService) {
+        console.log(`Initialized with '${this.storageService.db.name}'`);
+      }
+    }
+  }
+}
+```
+
+```typescript
+import * as bunyan from "bunyan";
+```
+
+->
+
+```javascript
+var bunyan = require("bunyan");
+```
+
+Also allowed:
+
+```typescript
+declare module "events" {
+  export class EventEmitter implements NodeJS.EventEmitter {...}
+}
+
+declare module "bunyan" {
+  import { EventEmitter } from 'events';
+  static EventEmitter: EventEmitter;
+}
+```
+
+## Modules
+
+The internal 'module' syntax is deprecated, use the 'namespace' keyword instead...
+
+### internal 'module' syntax
+
+```typescript
+module bazinga64 {
+
+  export function fromByteArray(decoded: Uint8Array) {
+    ...
+  }
+
+  export function toByteArray(encoded: string) {
+    ...
+  }
+}
+
+module.exports = bazinga64;
+```
+
+----------
+
+## JS Shortcuts
+
+```javascript
+var array = ['Anna', 'Bob', 'Clara', 'Daniel'];
+
+for (var i = 0, length = array.length; i < length; i++) {
+  console.log(array[i]);
+}
+
+for (var i in array) {
+  console.log(array[i]);
+}
+
+for (var v of array) {
+  console.log(v);
+}
+```
+
+----------
+
+## TS Compilation
+
+```typescript
+class Student {
+  public fullName: string;
+
+  constructor(firstName: string, lastName: string) {
+    this.fullName = `${firstName} ${lastName}`;
+  }
+}
+```
+
+```javascript
+var Student = (function () {
+  function Student(firstName, lastName) {
+    this.fullName = firstName + " " + lastName;
+  }
+
+  return Student;
+}());
+```
+
+```typescript
+class Student {
+  public fullName: string;
+
+  constructor(private firstName: string, private lastName: string) {
+    this.fullName = `${firstName} ${lastName}`;
+  }
+}
+```
+
+```javascript
+var Student = (function () {
+  function Student(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.fullName = firstName + " " + lastName;
+  }
+
+  return Student;
+}());
+```
+
+```typescript
+class Student {
+  public fullName: string;
+
+  constructor(public firstName: string, public lastName: string) {
+    this.fullName = `${firstName} ${lastName}`;
+  }
+}
+```
+
+Note: Same as "private" in this case
+
+```javascript
+var Student = (function () {
+    function Student(firstName, lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.fullName = firstName + " " + lastName;
+    }
+    return Student;
+}());
+```
+
+----------
+
+## Functional JavaScript
+
+### MapReduce
+
+MapReduce is a programming model to process data sets with a Map function and a Reduce function. 
+
+The **Map** function takes a series of data sets (input) and maps each to an output value. The **Reduce** function then applies a function against all output values (from left-to-right) to reduce them into a single value.
+
+```
+    var users = [{
+      "name": "Michael",
+      "devices": ["Tablet", "Smartphone"]
+    }, {
+      "name": "Laura",
+      "devices": ["Smartphone"]
+    }, {
+      "name": "Xenia",
+      "devices": ["Tablet", "Smartphone", "Laptop"]
+    }];
+    
+    // Callbacks
+    var mapping = (user) => user.devices.length;
+    var reducing = (previousValue, currentValue) => previousValue + currentValue;
+    
+    // MapReduce
+    var initialValue = 0;
+    var amountOfDevices = users.map(mapping).reduce(reducing, initialValue);
+    console.log(amountOfDevices); // 6
+```
