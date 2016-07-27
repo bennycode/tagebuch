@@ -2822,3 +2822,21 @@ The **Map** function takes a series of data sets (input) and maps each to an out
     var amountOfDevices = users.map(mapping).reduce(reducing, initialValue);
     console.log(amountOfDevices); // 6
 ```
+
+Old-School:
+
+```javascript
+users.map(function(user) {
+  return user.devices.length;
+}).reduce(function(previousValue, currentValue) {
+  return previousValue + currentValue;
+});
+```
+
+CoffeeScript
+
+```coffeescript
+return users
+.map (user) -> user.devices.length
+.reduce (previousValue, currentValue) -> previousValue + currentValue
+```
