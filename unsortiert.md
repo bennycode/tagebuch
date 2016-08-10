@@ -2840,3 +2840,34 @@ return users
 .map (user) -> user.devices.length
 .reduce (previousValue, currentValue) -> previousValue + currentValue
 ```
+
+## System.js
+
+**/public/index.html**
+
+```html
+<script src="dependencies/system.js/dist/system.js"></script>
+<script>
+    SystemJS.config({
+        baseURL: '/public/js'
+    });
+    
+    SystemJS.import('Person.js').then(function (Person) {
+        var benny = new Person('Benny');
+        var greeting = benny.greet();
+        console.log(greeting);
+    });
+</script>
+```
+
+**/public/js/Person.js**
+
+```javascript
+function Person(name) {
+  this.name = name;
+}
+
+Person.prototype.greet = function () {
+  return `Hello, my name is ${this.name}.`;
+};
+```
