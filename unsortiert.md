@@ -2954,3 +2954,11 @@ Fix:
 ```
 
 > error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+
+## Namings
+
+Unvorteilhaft: - base64.fromByteArray
+Vorteilhaft: - base64.getStringfromByteArray
+
+`fromByteArray` wurde gewählt, da JavaScript keine überladenen Methoden kennt. Daher wurde die Überladung mit der Namensgebung kenntlich gemacht. Allerdings widerspricht es dem allgemeinen Pattern, Methoden nach ihrem Rückgabewert zu benennen (wie bzw. `getUser`). Die Methode `fromByteArray` ist aber nach ihrer Eingabe (und nicht nach ihrer Ausgabe) benannt.
+
