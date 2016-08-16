@@ -2871,3 +2871,31 @@ Person.prototype.greet = function () {
   return `Hello, my name is ${this.name}.`;
 };
 ```
+
+**Testing**
+
+```javascript
+describe('Person', function() {
+
+  beforeAll(function(done) {
+    // Good to know: Karma serves files under the /base directory. So, on the server requests to files will be served up under http://localhost:9876/base/*
+    // From: https://karma-runner.github.io/0.8/plus/RequireJS.html
+    SystemJS.config({
+      baseURL: '/base/public/js'
+    });
+
+    SystemJS.import('Person.js').then(function(Person) {
+      window.Person = Person;
+      done();
+    });
+  });
+
+  describe('greet', function() {
+    it('sends a greeting', function() {
+      var benny = new Person('Benny');
+      var greeting = benny.greet();
+      expect(greeting).toBe('Hello, my name is Benny.');
+    });
+  });
+});
+```
