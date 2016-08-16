@@ -1976,6 +1976,32 @@ typings install dt~es6-promise --save --global
 import {Promise} from "es6-promise";
 ```
 
+### More about modules and types
+
+`"moduleResolution": "node"` in `tsconfig.js` means that the TypeScript compiler searches for a `*.d.ts` file in `package.json` which is declared like this:
+
+```json`
+  "typings": "dist/dexie.d.ts"
+```
+
+UMD modules are compatible to 'amd' or 'commonjs' modules. If using SystemJS, your `systemjs.config.js` file needs to map UMD modules:
+
+```javascript
+System.config({
+    ...
+    map: {
+        ...,
+        'dexie': 'node_modules/dexie/dist/dexie.js',
+    },
+    packages: {
+        ...,
+        'dexie': { format: 'amd' }
+    }
+});
+```
+
+Read more: https://github.com/dfahlander/Dexie.js/issues/256#issuecomment-222670446
+
 ### Multiple ways of writing CoffeeScript
 
 **Output**
