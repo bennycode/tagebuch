@@ -2002,6 +2002,9 @@ System.config({
 
 Read more: https://github.com/dfahlander/Dexie.js/issues/256#issuecomment-222670446
 
+## Use simple exports + destructured imports with TypeScript
+- https://basarat.gitbooks.io/typescript/content/docs/tips/defaultIsBad.html
+
 ### Multiple ways of writing CoffeeScript
 
 **Output**
@@ -2925,3 +2928,29 @@ describe('Person', function() {
   });
 });
 ```
+
+## Common TypeScript errors
+
+> for (... in ...) statements must be filtered with an if statement.
+
+Caused by:
+
+```typescript
+      for (let index in json) {
+        let value = json[index];
+        arrayBufferView[index] = value;
+      }
+```
+
+Fix:
+
+```typescript
+      for (let index in json) {
+        if (json.hasOwnProperty(index)) {
+          let value = json[index];
+          arrayBufferView[index] = value;
+        }
+      }
+```
+
+> error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
