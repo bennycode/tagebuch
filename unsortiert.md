@@ -80,6 +80,15 @@ Crypto.util.bytesToHex([123])
 
 ---
 
+**Encoding standard**
+
+```javascript
+var uint8array = new TextEncoder("utf-8").encode("¢");
+var string = new TextDecoder("utf-8").decode(uint8array);
+```
+
+---
+
 **Rust println for Newbies**
 
 ```rust
@@ -2961,4 +2970,370 @@ Unvorteilhaft: - base64.fromByteArray
 Vorteilhaft: - base64.getStringfromByteArray
 
 `fromByteArray` wurde gewählt, da JavaScript keine überladenen Methoden kennt. Daher wurde die Überladung mit der Namensgebung kenntlich gemacht. Allerdings widerspricht es dem allgemeinen Pattern, Methoden nach ihrem Rückgabewert zu benennen (wie bzw. `getUser`). Die Methode `fromByteArray` ist aber nach ihrer Eingabe (und nicht nach ihrer Ausgabe) benannt.
+
+## Node & Browser
+
+Simple code snippet to check if you are in a Browser- or Node environ:
+
+```javascript
+    if(typeof window === 'object') {
+      console.log('Hello from the Browser');
+    } else {
+      console.log('Hello from Node.js');
+    }
+```
+
+Node uses "global" and the Browser uses "window".
+
+Alternative:
+
+```javascript
+var app = window ? window : global;
+```
+
+## TypeScript & SystemJS
+
+**tsconfig.json**
+
+```json
+{
+  "compilerOptions": {
+    "module": "system",
+    "outFile": "app/js/module.js",
+    "rootDir": "app/ts",
+    "sourceMap": false,
+    "target": "es5"
+  }
+}
+```
+
+```js
+function Person(name) {
+  this.name = name;
+}
+
+Person.prototype.greet = function () {
+  return "Hello, my name is " + this.name + ".";
+};
+```
+
+```ts
+module test {
+  export class Person {
+    private name: string;
+
+    constructor(name: string) {
+      this.name = name;
+    }
+
+    public greet(): string {
+      return `Hello, my name is ${this.name}.`;
+    }
+  }
+}
+
+module.exports = test;
+```
+
+**module.js**
+
+```js
+var test;
+(function (test) {
+    var Person = (function () {
+        function Person(name) {
+            this.name = name;
+        }
+        Person.prototype.greet = function () {
+            return "Hello, my name is " + this.name + ".";
+        };
+        return Person;
+    }());
+    test.Person = Person;
+})(test || (test = {}));
+module.exports = test;
+```
+
+## SystemJS
+
+**Dexie with SystemJS**
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Demo</title>
+    <link rel="shortcut icon" href="data:image/x-icon;" type="image/x-icon" />
+    <script src="dependencies/system.js/system.js"></script>
+  </head>
+  <body>
+    <script>
+      SystemJS.config({
+        baseURL: '/public',
+        map: {
+          'dexie': 'dependencies/dexie/dexie.js',
+        },
+        packages: {
+          'dexie': {format: 'amd'}
+        }
+      });
+
+      SystemJS.import('dexie').then(function(Dexie) {
+        var db = new Dexie("friend_database");
+        db.version(1).stores({
+          friends: 'name,shoeSize'
+        });
+        db.open().catch(function(e) {
+          alert("Open failed: " + e);
+        });
+
+        db.friends.put({name: "Nicolas", shoeSize: 8}).then(function() {
+          return db.friends.get('Nicolas');
+        }).then(function(friend) {
+          console.log("Nicolas has shoe size " + friend.shoeSize);
+        }).catch(function(error) {
+          console.error("Ooops: " + error.message);
+        });
+      });
+    </script>
+  </body>
+</html>
+```
+
+```javascript
+      System.import('dexie').then(function(Dexie) {
+        var db = new Dexie('WireDatabase2');
+        db.version(1).stores({
+          'amplify': '',
+          'clients': ', meta.primary_key',
+          'conversation_events': ', raw.conversation, raw.time, raw.type, meta.timestamp',
+          'conversations': ', id, last_event_timestamp',
+          'keys': '',
+          'prekeys': '',
+          'sessions': ''
+        });
+
+        return db.open();
+      }).then(function(db) {
+        console.log('Connected to: ' + db.name);
+      });
+```
+
+**Multiple imports**
+
+```javascript
+Promise.all([
+    System.import('module1'),
+    System.import('module2')
+  ])
+  .then(function(modules) { ... })
+```
+
+### SystemJS configs
+
+```json
+System.config({
+  'map': {
+    'three.js': 'github:mrdoob/three.js@master',
+    'three.js/loaders/STLLoader': 'github:mrdoob/three.js@master/examples/js/loaders/STLLoader.js',
+  }
+  'packages': {
+    'three.js/loaders/STLLoader': {
+      globals: {
+        'THREE': 'three.js'
+      },
+      meta: {
+        deps: [
+          'three.js'
+        ]
+      }
+    },
+```
+
+Globals: https://github.com/systemjs/systemjs/blob/master/docs/module-formats.md#globals
+
+## Vanilla JavaScript
+
+### Inheritance
+
+**Generic**
+
+```javascript
+function Pile(cards, scoring) {
+  this.cards = cards || [];
+  this.scoring = scoring;
+}
+
+Pile.prototype.isEmpty = function () {
+  return this.cards.length === 0;
+};
+```
+
+**Specialization**
+
+```javascript
+function WastePile(cards, scoring) {
+  Pile.call(this, cards, scoring);
+}
+
+WastePile.prototype = Object.create(Pile.prototype);
+WastePile.prototype.constructor = WastePile;
+
+function flipToWaste(card) {
+  this.removeCard(card);
+  this.waste.addTopCard(card);
+  card.turnUp();
+}
+```
+
+----------
+
+## TypeScript export types
+
+Usual export:
+`import {DecodedData} from "./DecodedData";`
+
+Default export:
+`import DecodedData from "./DecodedData";`
+
+----------
+
+## Webpack
+
+### Detecting Webpack
+
+**webpack.config.js**
+
+```javascript
+new webpack.DefinePlugin({
+    'process.env': {
+        NODE_ENV: JSON.stringify('production'),
+        APP_ENV: JSON.stringify('browser')
+    }
+})
+```
+
+**webpack.config.js**
+
+```javascript
+const webpack = require('webpack');
+const nodeEnv = process.env.NODE_ENV || 'production';
+
+module.exports = {
+  ...
+};
+```
+
+```javascript
+module.exports = {
+    /* ... */
+    plugins = [
+        new webpack.EnvironmentPlugin(['NODE_ENV'])
+    ]
+};
+```
+
+```javascript
+"scripts": {
+    "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js"
+}
+```
+
+```javascript
+var webpack = require("webpack");
+
+var isProd = (process.env.NODE_ENV === 'production');
+
+// Conditionally return a list of plugins to use based on the current environment.
+// Repeat this pattern for any other config key (ie: loaders, etc).
+function getPlugins() {
+  var plugins = [];
+
+  // Always expose NODE_ENV to webpack, you can now use `process.env.NODE_ENV`
+  // inside your code for any environment checks; UglifyJS will automatically
+  // drop any unreachable code.
+  plugins.push(new webpack.DefinePlugin({
+    'process.env': {
+      'NODE_ENV': process.env.NODE_ENV
+    }
+  }));
+
+  // Conditionally add plugins for Production builds.
+  if (isProd) {
+    plugins.push(new webpack.optimize.UglifyJsPlugin());
+  }
+
+  // Conditionally add plugins for Development
+  else {
+    // ...
+  }
+
+  return plugins;
+}
+
+// Export Webpack configuration.
+module.exports = {
+  plugins: getPlugins()
+};
+```
+
+Source: http://jonnyreeves.co.uk/2016/simple-webpack-prod-and-dev-config/
+
+**Code**
+
+```javascript
+if (process.env.APP_ENV === 'browser') {
+    const doSomething = require('./browser-only-js');
+    doSomething();
+}
+```
+
+### Different configurations
+
+**package.json**
+
+```javascript
+"scripts": {
+  "run": "webpack --progress --watch",
+  "build": "webpack config=webpack.min.config.js"
+}
+```
+
+```javascript
+"build-production": "webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors"
+```
+
+### Special configs
+
+**webpack.config.js**
+
+```javascript
+  plugins: [
+    new webpack.optimize.DedupePlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('debug')
+      }
+    }),
+    [nodeEnv === 'production'] ? new webpack.optimize.UglifyJsPlugin({
+      compress: {warnings: false},
+      output: {comments: false},
+      sourceMap: true
+    }) : {}
+  ]
+```
+
+TODO: The `[nodeEnv === 'production']` tricks needs verification.
+
+### Optimization
+
+Use these plugins to optimize your production build:
+
+```javascript
+new webpack.optimize.CommonsChunkPlugin('common.js'),
+new webpack.optimize.DedupePlugin(),
+new webpack.optimize.UglifyJsPlugin(),
+new webpack.optimize.AggressiveMergingPlugin()
+```
 
