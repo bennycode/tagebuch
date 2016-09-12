@@ -3337,3 +3337,32 @@ new webpack.optimize.UglifyJsPlugin(),
 new webpack.optimize.AggressiveMergingPlugin()
 ```
 
+### Sources
+- http://blog.namangoel.com/browserify-vs-webpack-js-drama
+
+## TypeScript & SystemJS
+
+```typescript
+import {Proteus} from "wireapp-proteus";
+
+...
+
+Proteus.keys.IdentityKeyPair.deserialise(bytes.buffer);
+```
+
+->
+
+```javascript
+System.register(["dexie", "bazinga64", "wireapp-proteus"], function(exports_1, context_1) {
+});
+
+...
+
+var identity = wireapp_proteus_1.Proteus.keys.IdentityKeyPair.deserialise(bytes.buffer);
+```
+
+But often we want to use:
+
+```javascript
+var identity = wireapp_proteus_1.keys.IdentityKeyPair.deserialise(bytes.buffer);
+```
