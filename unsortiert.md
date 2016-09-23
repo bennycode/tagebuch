@@ -3366,3 +3366,43 @@ But often we want to use:
 ```javascript
 var identity = wireapp_proteus_1.keys.IdentityKeyPair.deserialise(bytes.buffer);
 ```
+
+## STOP MANUALLY ASSIGNING TYPESCRIPT CONSTRUCTOR PARAMETERS
+
+```typescript
+class Person {
+    private firstName: string;
+    private lastName: string;
+    
+    constructor(firstName: string, lastName: string) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+}
+```
+
+```typescript
+class Person {
+    constructor(private firstName: string, private lastName: string) {
+    }
+}
+```
+
+## Jasmine Hints
+
+When working with Promises and Jasmine, always use `.catch(done.fail);`.
+
+Like:
+
+```javascript
+it('does something', function(done) {
+    ...
+    return asnyc();
+  }).then(function(value) {
+    ...
+    expect(value).toBe('something');
+    done();
+  })
+  .catch(done.fail);
+});
+```
