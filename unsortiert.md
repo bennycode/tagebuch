@@ -3406,3 +3406,20 @@ it('does something', function(done) {
   .catch(done.fail);
 });
 ```
+
+## Best Practices
+
+- Always wrap external libraries (to easily exchange them)!
+
+Example:
+
+```coffee
+z.util.create_random_uuid = ->
+  return UUID.genV4().hexString
+```
+
+Exchange:
+- https://github.com/LiosK/UUID.js.git#v3.3.0
+
+With:
+- "node-uuid": "^1.4.7"
