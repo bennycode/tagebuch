@@ -3423,3 +3423,8 @@ Exchange:
 
 With:
 - "node-uuid": "^1.4.7"
+
+### Promises
+
+- Promise (A) calls Promise (B) and uses `catch`
+- Promise (B) uses Promise (C) which it doesn't catch, thus Promise (A) cannot catch the error inside Promise (B)
