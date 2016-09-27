@@ -3428,3 +3428,29 @@ With:
 
 - Promise (A) calls Promise (B) and uses `catch`
 - Promise (B) uses Promise (C) which it doesn't catch, thus Promise (A) cannot catch the error inside Promise (B)
+- Deswegen in inneren Promises immer `.catch(reject);` verwenden
+
+**Best Practice Example**
+
+```typescript
+public session_load(session_id: string): Promise<CryptoboxSession> {
+  return new Promise((resolve, reject) => {
+    if (this.cachedSessions[session_id]) {
+      resolve(this.cachedSessions[session_id]);
+    } else {
+      this.store.load_session(this.identity, session_id)
+        .then((session: Proteus.session.Session) => {
+          if (session) {
+            let pk_store: store.ReadOnlyStore = new store.ReadOnlyStore(this.store);
+            let cryptoBoxSession: CryptoboxSession = new CryptoboxSession(session_id, pk_store, session);
+            this.cachedSessions[session_id] = cryptoBoxSession;
+            resolve(cryptoBoxSession);
+          } else {
+            reject(new Error(`Session with ID '${session}' not found.`));
+          }
+        })
+        .catch(reject);
+    }
+  });
+}
+```
