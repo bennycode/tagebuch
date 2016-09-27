@@ -3454,3 +3454,22 @@ public session_load(session_id: string): Promise<CryptoboxSession> {
   });
 }
 ```
+
+**Always use return reject**
+
+- Otherwise it can be that the next line (after `reject` gets executed because of async lifestyle)
+
+```typescript
+public session_from_message(session_id: string, envelope: ArrayBuffer): Promise<Array<any>> {
+return new Promise((resolve, reject) => {
+  let env: Proteus.message.Envelope;
+
+  try {
+    env = Proteus.message.Envelope.deserialise(envelope);
+  } catch (error) {
+    return reject(error);
+  }
+
+  Proteus.session.Session.init_from_message(this.identity, this.pk_store, env)
+  ...
+```
