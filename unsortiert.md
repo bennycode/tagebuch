@@ -1993,6 +1993,17 @@ import {Promise} from "es6-promise";
   "typings": "dist/dexie.d.ts"
 ```
 
+## Simplified Declaration File
+- https://blogs.msdn.microsoft.com/typescript/2016/09/22/announcing-typescript-2-0/
+
+Getting and using declaration files in TypeScript 2.0 is much easier. To get declarations for a library like lodash, all you need is npm:
+
+```bash
+npm install --save @types/lodash
+```
+
+## Modules
+
 UMD modules are compatible to 'amd' or 'commonjs' modules. If using SystemJS, your `systemjs.config.js` file needs to map UMD modules:
 
 ```javascript
@@ -3472,4 +3483,115 @@ return new Promise((resolve, reject) => {
 
   Proteus.session.Session.init_from_message(this.identity, this.pk_store, env)
   ...
+```
+
+## TypeScript Import Syntax
+
+```typescript
+import sampleModule = require('modulename');
+import * as sampleModule from 'modulename';
+```
+
+**Declare Things on the fly**
+
+```typescript
+declare function require(name:string);
+var sampleModule = require('modulename');
+```
+
+**More about export = and import = require()**
+- https://www.typescriptlang.org/docs/handbook/modules.html
+
+### Example 1
+
+**Export Format**
+
+```typescript
+export default class Logdown {
+  static numberRegexp = /^[0-9]+$/;
+
+  constructor() {
+  }
+
+  isAcceptable(s: string): boolean {
+    return s.length === 5 && Logdown.numberRegexp.test(s);
+  }
+}
+```
+
+**Generated Definition**
+
+```typescript
+export default class Logdown {
+    static numberRegexp: RegExp;
+    constructor();
+    isAcceptable(s: string): boolean;
+}
+```
+
+**Import Format**
+
+```typescript
+import Logdown from "logdown";
+
+let logger: Logdown = new Logdown();
+logger.isAcceptable('Test');
+```
+
+**Generated Output**
+
+```javascript
+var logger = new logdown_1.default();
+logger.isAcceptable('Test');
+```
+
+**Note**
+
+- The `.default();` can be undesired
+
+### Example 2
+
+**Export Format**
+
+```typescript
+class Logdown {
+  static numberRegexp = /^[0-9]+$/;
+
+  constructor() {
+  }
+
+  isAcceptable(s: string): boolean {
+    return s.length === 5 && Logdown.numberRegexp.test(s);
+  }
+}
+
+export = Logdown;
+```
+
+**Generated Definition**
+
+```typescript
+declare class Logdown {
+  static numberRegexp: RegExp;
+  constructor();
+  isAcceptable(s: string): boolean;
+}
+
+export = Logdown;
+```
+
+**Import Format**
+
+```typescript
+import Logdown = require("logdown")
+
+let logger: Logdown = new Logdown();
+logger.isAcceptable('Test');
+```
+
+**Generated Output**
+
+```javascript
+var logger = new Logdown();
+logger.isAcceptable('Test');
 ```
