@@ -1917,6 +1917,7 @@ typings install dt~jasmine --save --global
 typings install jquery --save --ambient
 typings install github:DefinitelyTyped/DefinitelyTyped/angularjs/angular.d.ts#17ef40452039d19e06dc2a3815ea898c505860fa --ambient
 typings install github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#36a1be34dbe202c665b3ddafd50824f78c09eea3 --save --global
+typings install react --ambient --save
 ```
 
 **Legend**
@@ -3594,4 +3595,105 @@ logger.isAcceptable('Test');
 ```javascript
 var logger = new Logdown();
 logger.isAcceptable('Test');
+```
+
+## JavaScript
+
+### Lambas
+
+**Without**
+
+```javascript
+var a = [ { x: 22 }, { x: 42 } ];
+var maxCallback = function(pre, cur) {
+  return Math.max(pre.x, cur.x);
+}
+a.reduce(maxCallback); // 42
+```
+
+**With**
+
+```javascript
+var a = [ { x: 22 }, { x: 42 } ];
+var maxCallback = (pre, cur) => Math.max(pre.x, cur.x);
+a.reduce( maxCallback ); // 42
+```
+
+## JavaScript tricks
+
+### Keep variable within timed function call
+
+```javascript
+var id = 15;
+
+window.setTimeout(function() {
+  some_function(id);
+}, 100);
+```
+
+## Wonder of CoffeeScript
+
+```coffeescript
+if skip_other_own_clients then pre_condition = true else pre_condition = user_ids
+```
+
+```javascript
+var pre_condition;
+
+if (skip_other_own_clients) {
+  pre_condition = true;
+} else {
+  pre_condition = user_ids;
+}
+```
+
+----------
+
+### Node.js
+
+#### Import Classes
+
+**Person.js**
+
+```javascript
+function Person(firstName, lastName) {
+  this.firstName = firstName;
+  this.lastName = lastName;
+}
+
+Person.prototype.getFullName = function () {
+  return `${this.firstName} ${this.lastName}`;
+};
+
+module.exports = Person;
+```
+
+**index.js**
+
+```javascript
+var Person = require("./Person");
+
+var homer = new Person('Homer', 'Simpson');
+console.log(homer.getFullName());
+```
+
+#### Import Functions
+
+**helper.js**
+
+```javascript
+module.exports = {
+  add: function (a, b) {
+    return a + b;
+  }
+};
+```
+
+**index.js**
+
+```javascript
+var helper = require("./helper");
+
+var result = helper.add(40, 2);
+console.log(result);
 ```
