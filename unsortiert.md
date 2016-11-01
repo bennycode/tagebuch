@@ -3815,3 +3815,19 @@ var name = homer.getFullName();
 
 console.log(name); // Homer Simpson
 ```
+
+### Best Practices
+
+Always use:
+
+```javascript
+var LRUCache = require('./commonjs/LRUCache.js');
+```
+
+Instead of:
+
+```javascript
+var LRUCache = require('./commonjs/LRUCache');
+```
+
+Because of IDE "jump into file". Because it has problems when there is "LRUCache.ts" and "LRUCache.js". But with specifying "LRUCache.js" it won't.
