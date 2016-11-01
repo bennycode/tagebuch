@@ -3697,3 +3697,121 @@ var helper = require("./helper");
 var result = helper.add(40, 2);
 console.log(result);
 ```
+
+
+## TypeScript
+
+### Compilation
+
+#### Introduction
+
+**tsconfig.json** (using TypeScript v2.0.3) for all examples shown:
+
+```json
+{
+  "compilerOptions": {
+    "declaration": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitAny": false,
+    "outDir": "dist/commonjs",
+    "removeComments": true,
+    "rootDir": "src/ts",
+    "sourceMap": false,
+    "target": "es5"
+  },
+  "exclude": [
+    "bower_components",
+    "node_modules",
+    "typings/browser",
+    "typings/browser.d.ts"
+  ]
+}
+```
+
+#### 1
+
+```typescript
+class Person {
+
+  private firstName: string;
+  private lastName: string;
+
+  constructor(firstName: string, lastName: string) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  public getFullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+}
+
+export = Person;
+```
+
+```javascript
+var Person = require('./commonjs/Person.js');
+
+var homer = new Person('Homer', 'Simpson');
+var name = homer.getFullName();
+
+console.log(name); // Homer Simpson
+```
+
+#### 2
+
+```typescript
+export class Person {
+
+  private firstName: string;
+  private lastName: string;
+
+  constructor(firstName: string, lastName: string) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  public getFullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+}
+```
+
+```javascript
+var Person = require('./commonjs/Person.js');
+
+var homer = new Person.Person('Homer', 'Simpson');
+var name = homer.getFullName();
+
+console.log(name); // Homer Simpson
+```
+
+#### 3
+
+```typescript
+export default class Person {
+
+  private firstName: string;
+  private lastName: string;
+
+  constructor(firstName: string, lastName: string) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  public getFullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+}
+```
+
+```javascript
+var Person = require('./commonjs/Person.js').default;
+
+var homer = new Person('Homer', 'Simpson');
+var name = homer.getFullName();
+
+console.log(name); // Homer Simpson
+```
