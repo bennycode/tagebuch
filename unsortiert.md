@@ -3831,3 +3831,37 @@ var LRUCache = require('./commonjs/LRUCache');
 ```
 
 Because of IDE "jump into file". Because it has problems when there is "LRUCache.ts" and "LRUCache.js". But with specifying "LRUCache.js" it won't.
+
+## Best Practices
+
+### Always test with real data
+
+Example: https://github.com/wireapp/wire-webapp/pull/481
+
+**Wrong**
+
+```coffeescript
+    it 'loads events with start timestamp', (done) ->
+      conversation_service.load_events_from_db conversation_id, 4
+      .then (events) =>
+        expect(events.length).toBe 4
+        expect(events[0].time).toBe 3
+        expect(events[1].time).toBe 2
+        expect(events[2].time).toBe 1
+        expect(events[3].time).toBe 0
+        done()
+```
+
+**Right**
+
+```coffeescript
+    it 'loads events with start timestamp', (done) ->
+      conversation_service.load_events_from_db conversation_id, '2016-11-23T12:19:06.803Z'
+      .then (events) =>
+        expect(events.length).toBe 4
+        expect(events[0].time).toBe '2016-11-23T12:19:06.802Z'
+        expect(events[1].time).toBe '2016-11-23T12:19:06.801Z'
+        expect(events[2].time).toBe '2016-11-23T12:19:06.800Z'
+        expect(events[3].time).toBe '2016-11-23T12:19:06.799Z'
+        done()
+```
