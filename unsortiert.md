@@ -3865,3 +3865,17 @@ Example: https://github.com/wireapp/wire-webapp/pull/481
         expect(events[3].time).toBe '2016-11-23T12:19:06.799Z'
         done()
 ```
+
+## Tricking TypeScript
+
+If TypeScript complains about this:
+
+```typescript
+let storageEngine: any = cryptoBoxStore.constructor.name;
+```
+
+Cast it into `any`: 
+
+```typescript
+let storageEngine: string = (<any>cryptoBoxStore).constructor.name;
+```
