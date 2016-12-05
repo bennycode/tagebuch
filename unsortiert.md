@@ -3879,3 +3879,15 @@ Cast it into `any`:
 ```typescript
 let storageEngine: string = (<any>cryptoBoxStore).constructor.name;
 ```
+
+## TypeScript
+
+### Use of @types
+
+- https://www.npmjs.com/package/pubsub-js
+- `npm install --save pubsub-js`
+- https://www.npmjs.com/package/@types/pubsub-js
+- `npm install --save @types/pubsub-js`
+- Based on: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/pubsubjs/pubsub.d.ts
+- In TypeScript: `import * as PubSub from "pubsub-js";` & `PubSub.publish('topic', 'text');`
+- Compiles to: `var PubSub = require("pubsub-js");` & `PubSub.publish('topic', 'text');`
