@@ -3882,7 +3882,21 @@ let storageEngine: string = (<any>cryptoBoxStore).constructor.name;
 
 ## TypeScript
 
-### Use of @types
+### Importing definitions
+
+#### Using "tsd"
+
+- `tsd install node --save`
+- TS: `///<reference path="./typings/node/node.d.ts" />` & `import {EventEmitter} from 'events';`
+- Compiled: `var events_1 = require('events');` & `var eventEmitter = new events_1.EventEmitter();`
+
+#### Using "typings" tool
+
+- `typings install dt~node --global --save`
+- TS: `import {EventEmitter} from 'events';` & `const eventEmitter = new EventEmitter();`
+- Compiled: `var events_1 = require('events');` & `var eventEmitter = new events_1.EventEmitter();`
+
+#### Use of @types
 
 - https://www.npmjs.com/package/pubsub-js
 - `npm install --save pubsub-js`
