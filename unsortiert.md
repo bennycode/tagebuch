@@ -3905,3 +3905,26 @@ let storageEngine: string = (<any>cryptoBoxStore).constructor.name;
 - Based on: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/pubsubjs/pubsub.d.ts
 - In TypeScript: `import * as PubSub from "pubsub-js";` & `PubSub.publish('topic', 'text');`
 - Compiles to: `var PubSub = require("pubsub-js");` & `PubSub.publish('topic', 'text');`
+
+## ES2016
+
+### Fat arrow
+
+**Before**
+
+```javascript
+var family = [{name: 'Marc', age: 35}, {name: 'Lisa', age: 33}, {name: 'Paula', age: 2}];
+
+var filtered = family.filter(function (person) {
+  return person.age > 18;
+});
+```
+
+**After**
+
+```javascript
+var family = [{name: 'Marc', age: 35}, {name: 'Lisa', age: 33}, {name: 'Paula', age: 2}];
+
+family.filter(person => person.age > 18);
+```
+
