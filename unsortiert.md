@@ -3928,3 +3928,22 @@ var family = [{name: 'Marc', age: 35}, {name: 'Lisa', age: 33}, {name: 'Paula', 
 family.filter(person => person.age > 18);
 ```
 
+## CoffeeScript
+
+### Short Hacks
+
+```coffeescript
+  get_users_with_unverified_clients: ->
+    users_with_unverified_clients = []
+
+    all_users = [@self].concat @participating_user_ets()
+    all_users.forEach (user_et) ->
+      users_with_unverified_clients.push user_et if not user_et.is_verified()
+
+    return users_with_unverified_clients
+```
+
+```coffeescript
+  get_users_with_unverified_clients: ->
+    return (user_et for user_et in [@self].concat(@participating_user_ets()) when not user_et.is_verified())
+```
