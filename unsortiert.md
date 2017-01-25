@@ -3947,3 +3947,42 @@ family.filter(person => person.age > 18);
   get_users_with_unverified_clients: ->
     return (user_et for user_et in [@self].concat(@participating_user_ets()) when not user_et.is_verified())
 ```
+
+### Best Practices
+
+```coffeescript
+  init: =>
+    @width = $(window).width()
+    @height = $(window).height()
+    @_listen_to_unhandled_promise_rejection()
+    @_listen_to_window_resize()
+    @_listen_to_visibility_change =>
+      if document.visibilityState is 'visible'
+        @logger.info 'Webapp is visible'
+        @is_visible = true
+        window.clearInterval @lost_focus_interval
+        @lost_focus_interval = undefined
+        @lost_focus_on = undefined
+        amplify.publish z.event.WebApp.ANALYTICS.SESSION.START
+      else
+        @logger.info 'Webapp is hidden'
+        @is_visible = false
+        if @lost_focus_interval is undefined
+          @lost_focus_on = Date.now()
+          @lost_focus_interval = window.setInterval (=> @_check_for_timeout()), @lost_focus_interval_time
+    return @
+```
+
+->
+
+```coffeescript
+  init: =>
+    @width = $(window).width()
+    @height = $(window).height()
+    @_listen_to_unhandled_promise_rejection()
+    @_listen_to_window_resize()
+    @_listen_to_visibility_change()
+    return @
+```
+
+Man könnte sonst denken, dass das `return @` zu `_listen_to_visibility_change` gehört.
