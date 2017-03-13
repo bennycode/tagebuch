@@ -3986,3 +3986,9 @@ family.filter(person => person.age > 18);
 ```
 
 Man könnte sonst denken, dass das `return @` zu `_listen_to_visibility_change` gehört.
+
+## Short JavaScript
+
+```javascript
+ [086, 105, 101, 108, 101, 110, 032, 100, 097, 110, 107, 032, 106, 101, 116, 122, 116, 032, 104, 097, 098, 032, 105, 099, 104, 032, 101, 115, 032, 118, 101, 114, 115, 116, 097, 110, 100, 101, 110, 032, 040, 059].map(code => String.fromCharCode(code)).join('').replace(/\W/g, ' ').trim();﻿
+```
