@@ -4036,12 +4036,17 @@ describe('protobuf.js v5.0.1', function() {
 
   it('creates a generic message with text content', function() {
     var text = new buffers.Text('Hello');
-    var genericMessage = new buffers.GenericMessage('id');    
+    var genericMessage = new buffers.GenericMessage('id');
     genericMessage.set('text', text);
 
     expect(genericMessage.content).toBe('text');
     expect(genericMessage.message_id).toBe('id');
     expect(genericMessage.text.content).toBe('Hello');
+
+    var buffer = genericMessage.toArrayBuffer();
+    var typedArray = new Uint8Array(buffer);
+    var expectedArray = new Uint8Array([10, 2, 105, 100, 18, 7, 10, 5, 72, 101, 108, 108, 111]);
+    expect(typedArray).toEqual(expectedArray);
   });
 });
 ```
@@ -4073,6 +4078,12 @@ describe('protobuf.js v6.6.5', function() {
     expect(genericMessage.content).toBe('text');
     expect(genericMessage.message_id).toBe('id');
     expect(genericMessage.text.content).toBe('Hello');
+
+    var GenericMessage = buffers.lookup("GenericMessage");
+    var buffer = GenericMessage.encode(genericMessage).finish();
+    var typedArray = new Uint8Array(buffer);
+    var expectedArray = new Uint8Array([10, 2, 105, 100, 18, 7, 10, 5, 72, 101, 108, 108, 111]);
+    expect(typedArray).toEqual(expectedArray);  // fails
   });
 });
 ```
