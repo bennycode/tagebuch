@@ -4035,12 +4035,12 @@ describe('protobuf.js v5.0.1', function() {
   });
 
   it('creates a generic message with text content', function() {
-	var text = new buffers.Text('Hello');
+    var text = new buffers.Text('Hello');
     var genericMessage = new buffers.GenericMessage('id');    
     genericMessage.set('text', text);
 
-    expect(genericMessage.message_id).toBe('id');
     expect(genericMessage.content).toBe('text');
+    expect(genericMessage.message_id).toBe('id');
     expect(genericMessage.text.content).toBe('Hello');
   });
 });
@@ -4070,8 +4070,8 @@ describe('protobuf.js v6.6.5', function() {
     var text = buffers.nested.Text.create({content: 'Hello'});
     var genericMessage = buffers.nested.GenericMessage.create({message_id: 'id', text: text});
 
-    expect(genericMessage.message_id).toBe('id');
     expect(genericMessage.content).toBe('text');
+    expect(genericMessage.message_id).toBe('id');
     expect(genericMessage.text.content).toBe('Hello');
   });
 });
