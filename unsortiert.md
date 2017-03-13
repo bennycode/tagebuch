@@ -3992,3 +3992,57 @@ Man könnte sonst denken, dass das `return @` zu `_listen_to_visibility_change` 
 ```javascript
  [086, 105, 101, 108, 101, 110, 032, 100, 097, 110, 107, 032, 106, 101, 116, 122, 116, 032, 104, 097, 098, 032, 105, 099, 104, 032, 101, 115, 032, 118, 101, 114, 115, 116, 097, 110, 100, 101, 110, 032, 040, 059].map(code => String.fromCharCode(code)).join('').replace(/\W/g, ' ').trim();﻿
 ```
+
+## protobuf.js
+
+**messages.proto**
+
+```proto
+option java_package = "com.waz.model";
+
+message GenericMessage {
+  required string message_id = 1;
+  oneof content {
+    Text text = 2;
+  }
+}
+
+message Text {
+  required string content = 1;
+}
+```
+
+**protobuf.js v5.0.1**
+
+```javascript
+var protobuf = require('protobufjs');
+
+describe('protobuf.js v5.0.1', function() {
+
+  var buffers = undefined;
+
+  beforeAll(function(done) {
+    var file = 'node_modules/wire-webapp-protocol-messaging/proto/messages.proto';
+    protobuf.loadProtoFile(file, function(error, builder) {
+      if (error) {
+        done.fail(error);
+      } else {
+        buffers = builder.build();
+        done();
+      }
+    });
+  });
+
+  it('creates a generic message with text content', function() {
+    var genericMessage = new buffers.GenericMessage('id');
+    var text = new buffers.Text('Hello');
+    genericMessage.set('text', text);
+
+    expect(genericMessage.message_id).toBe('id');
+    expect(genericMessage.content).toBe('text');
+    expect(genericMessage.text.content).toBe('Hello');
+  });
+});
+```
+
+**protobuf.js v6.6.5**
